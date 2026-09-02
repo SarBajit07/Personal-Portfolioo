@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Tell audit (BUILD-PLAN 0.5)
+        run: npm run check:tells
+
+      - name: Contrast audit (BUILD-PLAN 10.2)
+        run: npm run check:contrast
+
+      - name: Content audit (unanswered interview markers)
+        run: npm run check:content
+
+      - name: Build
+        run: npm run build

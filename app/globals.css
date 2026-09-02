@@ -1,0 +1,537 @@
+/* Source detection is explicit. Automatic detection would scan BUILD-PLAN.md
+   and scripts/check-tells.mjs — both of which name banned utilities in order to
+   ban them — and helpfully generate the very classes this site forbids. */
+@import "tailwindcss" source(none);
+@source "../app";
+@source "../components";
+@source "../lib";
+
+/* ---------------------------------------------------------------------------
+   Tokens — BUILD-PLAN Phase 0.2
+   Warm paper, warm black, one accent. Never #FFF, never #000.
+   --------------------------------------------------------------------------- */
+
+:root {
+  color-scheme: light;
+
+  --paper: #faf8f3;
+  --paper-2: #f2ede4;
+  --ink: #171512;
+  --ink-2: #4a443c;
+  --ink-3: #8a8177;
+  --rule: #ded6c8;
+  --accent: #9e3d22;
+
+  /* Page geometry. Prose sits in columns 2–8 of 12; it is never centred. */
+  --measure: 66ch;
+  --page-max: 78rem;
+  --page-pad: 1.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --paper: #14120f;
+    --paper-2: #1d1a15;
+    --ink: #efe9de;
+    --ink-2: #b9b0a2;
+    --ink-3: #857c70;
+    --rule: #322d26;
+    --accent: #d4703f;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --paper: #14120f;
+  --paper-2: #1d1a15;
+  --ink: #efe9de;
+  --ink-2: #b9b0a2;
+  --ink-3: #857c70;
+  --rule: #322d26;
+  --accent: #d4703f;
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --page-pad: 3rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Theme — Tailwind's defaults are DELETED, not overridden.
+   If bg-indigo-500 still resolves, it eventually gets used. Same for
+   shadow-lg and rounded-2xl: the utilities do not exist on this site.
+   --------------------------------------------------------------------------- */
+
+@theme inline {
+  --color-*: initial;
+  --font-*: initial;
+  --text-*: initial;
+  --shadow-*: initial;
+  --drop-shadow-*: initial;
+  --radius-*: initial;
+  --blur-*: initial;
+
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-inherit: inherit;
+
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-rule: var(--rule);
+  --color-accent: var(--accent);
+
+  --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
+  --font-body: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-face), ui-monospace, "SF Mono", monospace;
+
+  /* Hand-tuned scale: 12 14 16 18 21 28 40 64 96.
+     Named for what they are, so nobody reaches for text-4xl by reflex. */
+  --text-caption: 0.75rem;
+  --text-note: 0.875rem;
+  --text-small: 1rem;
+  --text-body: 1.125rem;
+  --text-lead: 1.3125rem;
+  --text-h3: 1.75rem;
+  --text-h2: 2.5rem;
+  --text-h1: 4rem;
+  --text-display: 6rem;
+
+  /* border-radius maxes at 4px and is mostly 0. */
+  --radius-hair: 2px;
+  --radius-sm: 4px;
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    font-size: var(--text-body);
+    line-height: 1.6;
+    text-wrap: pretty;
+    hanging-punctuation: first last;
+    -webkit-font-smoothing: antialiased;
+    font-synthesis-weight: none;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display), Georgia, serif;
+    text-wrap: balance;
+    font-weight: 400;
+  }
+
+  /* Display sizes get the wonky, tight setting. Small sizes do not. */
+  h1 {
+    font-size: var(--text-h1);
+    line-height: 0.98;
+    letter-spacing: -0.022em;
+    font-variation-settings: "opsz" 144, "SOFT" 0, "WONK" 1;
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    line-height: 1.05;
+    letter-spacing: -0.018em;
+    font-variation-settings: "opsz" 96, "SOFT" 0, "WONK" 1;
+  }
+
+  h3 {
+    font-size: var(--text-h3);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    font-variation-settings: "opsz" 32, "SOFT" 0, "WONK" 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 0;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--paper);
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--rule);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Page geometry — 12 columns, content off-centre (Phase 0.3)
+   --------------------------------------------------------------------------- */
+
+@layer components {
+  .page {
+    width: 100%;
+    max-width: var(--page-max);
+    margin-inline: auto;
+    padding-inline: var(--page-pad);
+  }
+
+  .grid12 {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: 1.5rem;
+  }
+
+  @media (min-width: 64rem) {
+    .grid12 {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: 2rem;
+    }
+  }
+
+  /* Prose: columns 2–8. Gutter: 9–12. Below lg, both are full width. */
+  .col-prose {
+    grid-column: 1 / -1;
+  }
+
+  .col-gutter {
+    grid-column: 1 / -1;
+  }
+
+  @media (min-width: 64rem) {
+    .col-prose {
+      grid-column: 2 / 9;
+    }
+
+    .col-gutter {
+      grid-column: 9 / 13;
+    }
+  }
+
+  .measure {
+    max-width: var(--measure);
+  }
+
+  /* Small-caps metadata label. */
+  .label {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: var(--text-caption);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  /* Index numeral hangs into the margin (Phase 0.5, fingerprint 1). */
+  .index-numeral {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: var(--text-caption);
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .prose-body p {
+    margin-block: 0 1.15em;
+    max-width: var(--measure);
+    color: var(--ink-2);
+  }
+
+  .prose-body p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Case study body — the components in components/prose.tsx resolve to these.
+   Sections are numbered by a CSS counter and the numeral hangs in the left
+   margin, so the spine of a long article is visible without a sidebar.
+   --------------------------------------------------------------------------- */
+
+@layer components {
+  .case-body {
+    counter-reset: case-section;
+  }
+
+  .case-h2 {
+    position: relative;
+    max-width: var(--measure);
+    margin-block: 3.5rem 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .case-h2::before {
+    counter-increment: case-section;
+    content: counter(case-section, decimal-leading-zero);
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: var(--text-caption);
+    letter-spacing: 0.09em;
+    color: var(--ink-3);
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  @media (min-width: 80rem) {
+    .case-h2::before {
+      position: absolute;
+      left: -4.5rem;
+      top: 1.9rem;
+      margin: 0;
+    }
+  }
+
+  .case-h3 {
+    max-width: var(--measure);
+    margin-block: 2.25rem 0.75rem;
+  }
+
+  .case-p {
+    max-width: var(--measure);
+    margin-block: 0 1.15em;
+    color: var(--ink-2);
+  }
+
+  .case-ul,
+  .case-ol {
+    max-width: var(--measure);
+    margin-block: 0 1.6em;
+    color: var(--ink-2);
+  }
+
+  .case-ul li,
+  .case-ol li {
+    margin-bottom: 0.6em;
+    padding-left: 1.6rem;
+    position: relative;
+  }
+
+  /* An en dash, not a bullet. Bullets in a body of prose read as a slide. */
+  .case-ul li::before {
+    content: "3";
+    position: absolute;
+    left: 0;
+    color: var(--ink-3);
+  }
+
+  .case-ol {
+    counter-reset: case-item;
+  }
+
+  .case-ol li::before {
+    counter-increment: case-item;
+    content: counter(case-item) ".";
+    position: absolute;
+    left: 0;
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: var(--text-note);
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-3);
+  }
+
+  .case-quote {
+    max-width: var(--measure);
+    margin-block: 2.5rem;
+    padding-left: 1.75rem;
+    border-left: 1px solid var(--rule);
+    font-family: var(--font-display), Georgia, serif;
+    font-size: var(--text-lead);
+    line-height: 1.35;
+    color: var(--ink);
+  }
+
+  .case-quote p {
+    margin: 0;
+  }
+
+  .case-code {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.9em;
+    background: var(--paper-2);
+    padding: 0.1em 0.35em;
+  }
+
+  .case-pre {
+    max-width: var(--measure);
+    margin-block: 2rem;
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    background: var(--paper-2);
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: var(--text-note);
+    line-height: 1.5;
+  }
+
+  .case-pre .case-code {
+    background: none;
+    padding: 0;
+  }
+
+  .case-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-small);
+    color: var(--ink-2);
+  }
+
+  .case-table th {
+    text-align: left;
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: var(--text-caption);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--ink-3);
+    padding: 0 1.5rem 0.6rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .case-table td {
+    padding: 0.7rem 1.5rem 0.7rem 0;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+
+  /*
+     Inline elements are styled by descendant selector rather than exported as
+     components, so prose can use plain <strong>, <em>, <code> and <a> without
+     an import. Only block-level pieces need a component, because those carry
+     the section counter and the measure.
+  */
+  .case-body strong {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .case-body em {
+    font-style: italic;
+  }
+
+  .case-body :not(pre) > code {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.87em;
+    color: var(--ink-2);
+    background: var(--paper-2);
+    padding: 0.1em 0.3em;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+  }
+
+  .case-body a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+  }
+
+  .case-body a:hover {
+    color: var(--accent);
+    text-decoration-color: var(--accent);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   About — deliberately airier than a case study (Phase 7 exit criterion).
+   Same element map, different density: no section numerals, no rules between
+   sections, larger body and looser leading.
+   --------------------------------------------------------------------------- */
+
+@layer components {
+  .about-body .case-h2 {
+    border-top: 0;
+    padding-top: 0;
+    margin-block: 4rem 1rem;
+    font-size: var(--text-h3);
+  }
+
+  .about-body .case-h2::before {
+    content: none;
+  }
+
+  .about-body .case-p {
+    font-size: var(--text-lead);
+    line-height: 1.65;
+    margin-block: 0 1.3em;
+  }
+
+  .about-body .case-quote {
+    font-size: var(--text-body);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Motion — the entire budget for the site (Phase 0.4)
+   One load-in: hero lines rise 8px and fade, 40ms stagger. Nothing scrolls in.
+   --------------------------------------------------------------------------- */
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise-in 520ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  animation-delay: calc(var(--rise-index, 0) * 40ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Print — case studies should survive being printed (Phase 6 exit criterion)
+   --------------------------------------------------------------------------- */
+
+@media print {
+  :root {
+    --paper: #fff;
+    --ink: #000;
+    --ink-2: #222;
+    --ink-3: #555;
+    --rule: #bbb;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: var(--ink-3);
+  }
+}
