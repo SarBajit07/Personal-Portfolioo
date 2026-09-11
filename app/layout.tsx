@@ -21,6 +21,24 @@ export const metadata: Metadata = {
   },
   twitter: { card: "summary_large_image" },
   alternates: { canonical: "/" },
+  /* Default is index/follow anyway; what is worth saying explicitly are the
+     googleBot limits, which are *not* the defaults — without them Google caps
+     snippets and shows only a thumbnail-sized preview image. */
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  /* Distinguishes this Sarbajit Timalsina from any other in a result list. */
+  creator: site.name,
+  publisher: site.name,
+  category: "technology",
 };
 
 /**
@@ -36,7 +54,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     /* The theme script writes to <html> before React hydrates. */
-    <html lang="en" className={fontVariables} suppressHydrationWarning>
+    <html lang={site.lang} className={fontVariables} suppressHydrationWarning>
       <body className="flex min-h-screen flex-col">
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <a

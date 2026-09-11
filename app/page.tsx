@@ -1,11 +1,12 @@
-import { existsSync } from "node:fs";
-import { join } from "node:path";
 import Image from "next/image";
 import Link from "next/link";
+import { JsonLd } from "@/components/JsonLd";
 import { ProjectCard } from "@/components/ProjectCard";
 import { projects } from "@/content/projects";
 import type { TimelineEntry } from "@/content/profile";
 import { bio, education, experience, skills } from "@/content/profile";
+import { findPortrait } from "@/lib/portrait";
+import { homeGraph } from "@/lib/schema";
 import { site } from "@/lib/site";
 
 /**
@@ -19,30 +20,13 @@ const HERO_LINES = [
   "building things end to end.",
 ] as const;
 
-/* The hero photo, by convention rather than configuration. Any of these
-   extensions works; if none is present the hero renders a monogram instead of
-   a broken frame. */
-const PORTRAIT_CANDIDATES = [
-  "/sarbajit.jpg",
-  "/sarbajit.jpeg",
-  "/sarbajit.png",
-] as const;
-
-function findPortrait(): string | null {
-  // Checked per render rather than once at module load, so dropping the file
-  // in during `next dev` shows up on the next refresh without a restart.
-  return (
-    PORTRAIT_CANDIDATES.find((src) =>
-      existsSync(join(process.cwd(), "public", src)),
-    ) ?? null
-  );
-}
-
 export default function Home() {
   const portrait = findPortrait();
 
   return (
     <main id="main">
+      <JsonLd data={homeGraph()} />
+
       {/* ---------------------------------------------------------------- Hero */}
       <section id="home" className="section page pt-16 lg:pt-24">
         <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-16">
@@ -89,7 +73,7 @@ export default function Home() {
             {portrait ? (
               <Image
                 src={portrait}
-                alt={site.name}
+                alt={`${site.name}, ${site.role.toLowerCase()} in ${site.location}`}
                 fill
                 sizes="(min-width: 1024px) 19rem, 80vw"
                 priority

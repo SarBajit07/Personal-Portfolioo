@@ -1,12 +1,25 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
 import { GitHubIcon, MailIcon, PinIcon } from "@/components/Icons";
+import { JsonLd } from "@/components/JsonLd";
+import { contactGraph } from "@/lib/schema";
 import { site } from "@/lib/site";
+
+/* The old description was four words and said nothing a searcher could match
+   on. This one carries the role and the city, which is what someone typing
+   "web developer Kathmandu" is actually looking for. */
+const description = `Get in touch with ${site.name}, a ${site.role.toLowerCase()} in ${site.location}. Available for project work, roles, and questions about anything on this site.`;
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: `Get in touch with ${site.name}.`,
+  description,
   alternates: { canonical: "/contact/" },
+  openGraph: {
+    type: "profile",
+    title: `Contact — ${site.name}`,
+    description,
+    url: "/contact/",
+  },
 };
 
 /**
@@ -21,6 +34,8 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <main id="main" className="page section">
+      <JsonLd data={contactGraph()} />
+
       <p className="label">Contact</p>
       <h1 className="mt-3">Get in touch</h1>
       <p className="mt-5 max-w-[50ch] text-lead text-ink-2">
