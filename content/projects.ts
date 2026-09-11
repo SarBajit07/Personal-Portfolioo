@@ -72,7 +72,7 @@ export const projects: readonly Project[] = [
     slug: "krishi-saathi",
     title: "Krishi Saathi",
     blurb:
-      "An agricultural web app giving farmers real-time market prices, crop disease detection from a photo, and expert advice in one place. The disease model is where I first worked in PyTorch.",
+      "My college final year project: an agricultural web app giving farmers real-time market prices, crop disease detection from a photo, and expert advice in one place. The disease model is where I first worked in PyTorch.",
     stack: ["React", "Tailwind CSS", "PyTorch", "MongoDB"],
     year: "2025",
     featured: false,

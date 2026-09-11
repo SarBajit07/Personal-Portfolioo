@@ -47,22 +47,12 @@ export default function Home() {
       <section id="home" className="section page pt-16 lg:pt-24">
         <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-16">
           <div>
-            <div
-              className="rise inline-flex items-center gap-2 rounded-full border border-rule bg-surface px-3.5 py-1.5"
-              style={{ ["--rise-index" as string]: 0 }}
-            >
-              <span className="status-dot" />
-              <span className="text-caption tracking-wider text-ink-2 uppercase">
-                Available for work
-              </span>
-            </div>
-
-            <h1 className="mt-7 max-w-[18ch]">
+            <h1 className="max-w-[18ch]">
               {HERO_LINES.map((line, i) => (
                 <span
                   key={line}
                   className="rise block"
-                  style={{ ["--rise-index" as string]: i + 1 }}
+                  style={{ ["--rise-index" as string]: i }}
                 >
                   {line}
                 </span>
@@ -71,7 +61,7 @@ export default function Home() {
 
             <p
               className="rise mt-6 max-w-[52ch] text-lead text-ink-2"
-              style={{ ["--rise-index" as string]: HERO_LINES.length + 1 }}
+              style={{ ["--rise-index" as string]: HERO_LINES.length }}
             >
               I&rsquo;m {site.name}, a developer in {site.location}. I write
               Next.js and React on the front, Express.js and PostgreSQL behind
@@ -81,7 +71,7 @@ export default function Home() {
 
             <div
               className="rise mt-9 flex flex-wrap gap-3"
-              style={{ ["--rise-index" as string]: HERO_LINES.length + 2 }}
+              style={{ ["--rise-index" as string]: HERO_LINES.length + 1 }}
             >
               <Link href="/#projects" className="btn btn-primary">
                 View my work
@@ -94,7 +84,7 @@ export default function Home() {
 
           <div
             className="rise portrait justify-self-start lg:justify-self-end"
-            style={{ ["--rise-index" as string]: HERO_LINES.length + 3 }}
+            style={{ ["--rise-index" as string]: HERO_LINES.length + 2 }}
           >
             {portrait ? (
               <Image

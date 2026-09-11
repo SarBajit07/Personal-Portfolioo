@@ -366,15 +366,6 @@
     border-color: var(--ink-3);
   }
 
-  /* Availability marker in the hero. A dot, not a pulsing beacon. */
-  .status-dot {
-    width: 0.4375rem;
-    height: 0.4375rem;
-    border-radius: var(--radius-full);
-    background: var(--accent);
-    flex: none;
-  }
-
   /* Education / experience list. One vertical rule, ticks along it. */
   .timeline {
     position: relative;
