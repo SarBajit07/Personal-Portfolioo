@@ -12,7 +12,7 @@ const css = readFileSync("app/globals.css", "utf8");
 
 function tokens(block) {
   const out = {};
-  for (const [, name, value] of block.matchAll(/--(paper|paper-2|ink|ink-2|ink-3|rule|accent):\s*(#[0-9a-f]{6})/gi)) {
+  for (const [, name, value] of block.matchAll(/--(paper|paper-2|ink|ink-2|ink-3|rule|accent|danger):\s*(#[0-9a-f]{6})/gi)) {
     out[name] = value;
   }
   return out;
@@ -41,10 +41,12 @@ const PAIRS = [
   ["ink", "paper", 7, "body ground"],
   ["ink-2", "paper", 4.5, "prose"],
   ["ink-3", "paper", 3, "labels and captions (>=14px, non-essential)"],
-  ["accent", "paper", 4.5, "links, errors, focus ring"],
+  ["accent", "paper", 4.5, "links and focus ring"],
+  ["danger", "paper", 4.5, "validation errors"],
   ["ink", "paper-2", 7, "hovered index row"],
   ["ink-2", "paper-2", 4.5, "prose on the second ground"],
   ["accent", "paper-2", 4.5, "links on the second ground"],
+  ["danger", "paper-2", 4.5, "validation errors on a filled field"],
 ];
 
 let failed = 0;

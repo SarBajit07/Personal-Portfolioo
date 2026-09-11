@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
+import { GitHubIcon, MailIcon, PinIcon } from "@/components/Icons";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -12,6 +13,10 @@ export const metadata: Metadata = {
  * The one route besides the home page. The form is never the only way out —
  * the address and the GitHub profile sit beside it, so a broken endpoint is an
  * inconvenience rather than a dead end.
+ *
+ * Both columns are headed sections. Before that the form was the only thing on
+ * the page with no heading of its own, which left the document outline going
+ * straight from the h1 to nothing.
  */
 export default function ContactPage() {
   return (
@@ -24,39 +29,71 @@ export default function ContactPage() {
       </p>
 
       <div className="mt-14 grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-16">
-        <div className="card p-6 sm:p-8">
+        <section aria-labelledby="form-heading" className="card p-6 sm:p-8">
+          <h2 id="form-heading" className="text-h3">
+            Send a message
+          </h2>
+          <p className="mt-2 mb-8 max-w-[44ch] text-small text-ink-2">
+            Three fields, and it goes straight to my inbox.
+          </p>
           <ContactForm />
-        </div>
+        </section>
 
-        <aside className="space-y-8">
-          <div>
-            <p className="label">Email</p>
-            <a
-              href={`mailto:${site.email}`}
-              className="mt-1 inline-block py-1.5 text-small break-all text-accent no-underline hover:underline"
-            >
-              {site.email}
-            </a>
-          </div>
+        <aside aria-labelledby="direct-heading">
+          <h2 id="direct-heading" className="text-h3">
+            Or reach me directly
+          </h2>
 
-          <div>
-            <p className="label">GitHub</p>
-            <a
-              href={site.github}
-              rel="noreferrer noopener"
-              className="mt-1 inline-block py-1.5 text-small text-ink-2 no-underline hover:text-ink"
-            >
-              {new URL(site.github).pathname.replace("/", "@")}
-            </a>
-          </div>
+          {/*
+            Each icon sits in the label row and the value is indented to clear
+            it — 1rem of icon plus the 0.5rem gap — so the three values line up
+            with each other rather than stepping out under their own marks.
+          */}
+          <dl className="mt-6 border-t border-rule">
+            <div className="border-b border-rule py-5">
+              <dt className="label flex items-center gap-2">
+                <MailIcon className="size-4 text-ink-3" />
+                Email
+              </dt>
+              <dd className="mt-1.5 pl-6">
+                <a
+                  href={`mailto:${site.email}`}
+                  className="text-small break-all text-accent no-underline hover:underline"
+                >
+                  {site.email}
+                </a>
+              </dd>
+            </div>
 
-          <div>
-            <p className="label">Location</p>
-            <p className="mt-2 text-small text-ink-2">{site.location}, Nepal</p>
-            <p className="mt-2 max-w-[32ch] text-note text-ink-3">
-              UTC+5:45, so replies land at odd hours for most of the world.
-            </p>
-          </div>
+            <div className="border-b border-rule py-5">
+              <dt className="label flex items-center gap-2">
+                <GitHubIcon className="size-4 text-ink-3" />
+                GitHub
+              </dt>
+              <dd className="mt-1.5 pl-6">
+                <a
+                  href={site.github}
+                  rel="noreferrer noopener"
+                  className="text-small text-ink-2 no-underline hover:text-ink"
+                >
+                  {new URL(site.github).pathname.replace("/", "@")}
+                </a>
+              </dd>
+            </div>
+
+            <div className="border-b border-rule py-5">
+              <dt className="label flex items-center gap-2">
+                <PinIcon className="size-4 text-ink-3" />
+                Location
+              </dt>
+              <dd className="mt-1.5 pl-6 text-small text-ink-2">
+                {site.location}, Nepal
+                <span className="mt-1.5 block max-w-[32ch] text-note text-ink-3">
+                  UTC+5:45, so replies land at odd hours for most of the world.
+                </span>
+              </dd>
+            </div>
+          </dl>
         </aside>
       </div>
     </main>

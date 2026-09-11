@@ -48,6 +48,12 @@
   --accent-soft: rgb(91 155 248 / 12%);
   --accent-line: rgb(91 155 248 / 30%);
 
+  /* Failure. Separate from the accent on purpose: an error must not read as
+     the same thing as a link or the primary action. */
+  --danger: #ff6b6b;
+  --danger-soft: rgb(255 107 107 / 12%);
+  --danger-line: rgb(255 107 107 / 32%);
+
   /* The lettered stand-in on a project with no screenshot yet. */
   --placeholder-ink: rgb(255 255 255 / 7%);
 }
@@ -75,6 +81,11 @@
   --accent-soft: rgb(28 95 201 / 9%);
   --accent-line: rgb(28 95 201 / 28%);
 
+  /* Deepened for the light ground, as the accent is. */
+  --danger: #c0202b;
+  --danger-soft: rgb(192 32 43 / 9%);
+  --danger-line: rgb(192 32 43 / 30%);
+
   --placeholder-ink: rgb(16 17 28 / 9%);
 }
 
@@ -101,6 +112,9 @@
   --color-rule-strong: var(--rule-strong);
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-line: var(--danger-line);
 
   /* One family, site-wide. The three names are kept so existing
      font-display / font-body / font-mono utilities still resolve. */
