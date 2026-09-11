@@ -9,7 +9,7 @@ import {
 } from "@/lib/contact";
 
 /**
- * The site's only dynamic endpoint (TRD §6). On Cloudflare this was a Pages
+ * The site's only dynamic endpoint. On Cloudflare this was a Pages
  * Function outside the build; on Vercel it is a Route Handler, which means it
  * shares the schema in lib/contact.ts with the form rather than duplicating it.
  *

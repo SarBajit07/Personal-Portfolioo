@@ -1,16 +1,15 @@
 /**
  * Everything the About section renders.
  *
- * Every value here was taken from the previous portfolio and its API
- * (personal-portfolio-n76z.onrender.com): the degree and college, the semester,
- * the three skill groups, the one experience entry. Nothing is invented — where
- * the old site had no answer, there is no field here.
+ * Values here come from Sarbajit's own record of the work — the NTCS role, the
+ * degree and college, the skill groups. Nothing is invented: where there is no
+ * answer, there is no field.
  */
 
 export const bio = [
-  "I'm a full-stack developer in Kathmandu, in the eighth semester of a B.Sc. in Computer Science and Information Technology at Madan Bhandari Memorial College.",
-  "Most of what I build is React on the front and Node.js on the back, with a relational database underneath. I design REST APIs with Express, keep data in PostgreSQL, and deploy on Vercel and Render. When a problem doesn't fit an endpoint — crop disease detection, for one — I reach for Python and PyTorch instead.",
-  "What I care about is that the architecture stays legible and the thing stays fast, from the database all the way to the browser.",
+  "I'm a full-stack web developer in Kathmandu. I finished a B.Sc. in Computer Science and Information Technology at Madan Bhandari Memorial College in 2026, and spent most of that final year building production features at New Tech Consultancy Service.",
+  "Day to day that meant Next.js on the front, Express.js and PostgreSQL behind it, across whichever client project needed the work — an e-commerce marketplace one week, a live news platform the next. The parts I enjoy most are the unglamorous ones: real-time currency exchange that has to stay correct, cart and product queries that have to stay fast.",
+  "When a problem doesn't fit an endpoint — crop disease detection, for one — I reach for Python and PyTorch instead. What I care about is that the architecture stays legible and the thing stays fast, from the database all the way to the browser.",
 ] as const;
 
 export interface SkillGroup {
@@ -21,15 +20,19 @@ export interface SkillGroup {
 export const skills: readonly SkillGroup[] = [
   {
     category: "Frontend",
-    items: ["React", "JavaScript", "HTML5", "CSS3", "Tailwind CSS", "Vite"],
+    items: ["Next.js", "React", "JavaScript", "TypeScript", "Tailwind CSS", "HTML5", "CSS3"],
   },
   {
     category: "Backend & ML",
-    items: ["Node.js", "Express", "REST APIs", "Python", "PyTorch"],
+    items: ["Node.js", "Express.js", "REST APIs", "Python", "PyTorch"],
   },
   {
     category: "Databases & Tools",
     items: ["PostgreSQL", "SQL", "Git", "GitHub", "Vercel", "Postman"],
+  },
+  {
+    category: "Testing & QA",
+    items: ["Manual QA", "Functional testing", "Bug reporting"],
   },
 ];
 
@@ -38,19 +41,32 @@ export interface TimelineEntry {
   readonly title: string;
   readonly organization: string;
   readonly description: string;
+  /** Specific work worth naming. Omitted where there is nothing to name. */
+  readonly highlights?: readonly string[];
 }
 
 export const education: readonly TimelineEntry[] = [
   {
-    period: "2022 — Present",
+    period: "2022 — 2026",
     title: "B.Sc. in CSIT",
     organization: "Madan Bhandari Memorial College",
     description:
-      "Currently in the 8th semester. Coursework in web development, database management, and data structures.",
+      "Four years of computer science and IT, with coursework in web development, database management, and data structures.",
   },
 ];
 
 export const experience: readonly TimelineEntry[] = [
+  {
+    period: "Dec 2025 — Aug 2026",
+    title: "Full Stack Web Developer",
+    organization: "New Tech Consultancy Service (NTCS) · Full-time · Hybrid, Kathmandu",
+    description:
+      "Developed and maintained full-stack features in Express.js, PostgreSQL and Next.js across client projects, working with cross-functional teams to debug and ship production-ready work across the stack.",
+    highlights: [
+      "Built performance and backend features for Nonamart, an e-commerce marketplace — including real-time currency exchange handling and optimisations to the product and cart data flows.",
+      "Contributed to 24 Ghanta Nepal, a live news platform, as part of the development team.",
+    ],
+  },
   {
     period: "Ongoing",
     title: "Independent Developer",

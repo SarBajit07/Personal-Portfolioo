@@ -98,7 +98,7 @@ for (const file of COPY_DIRS.flatMap(walk)) {
 if (failures.length > 0) {
   console.error(`\nTell audit failed — ${failures.length} finding(s):\n`);
   for (const failure of failures) console.error("  " + failure);
-  console.error("\nSee BUILD-PLAN.md §0.5.\n");
+  console.error("\nEach one is a default this design does not use.\n");
   process.exit(1);
 }
 

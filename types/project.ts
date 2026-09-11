@@ -14,7 +14,7 @@ export interface Project {
   readonly blurb: string;
   /** e.g. ["NestJS", "Next.js", "PostgreSQL"] */
   readonly stack: readonly string[];
-  /** Path under /public, e.g. "/projects/ishara.png". */
+  /** Path under /public, e.g. "/projects/nonamart.png". */
   readonly image?: string;
   /** Absolute URL to the running thing. */
   readonly live?: string;

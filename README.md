@@ -2,10 +2,6 @@
 
 Portfolio site. Next.js App Router, deployed to Vercel.
 
-- `Portfolio-Website-TRD.md` — what gets built
-- `BUILD-PLAN.md` — in what order, with exit criteria, and the design rules
-- `content/QUESTIONS.md` — the interview that unblocks the copy
-
 ## Commands
 
 | | |
@@ -14,76 +10,71 @@ Portfolio site. Next.js App Router, deployed to Vercel.
 | `npm run build` | production build |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run lint` | eslint |
-| `npm run check:tells` | the BUILD-PLAN §0.5 design audit |
-| `npm run check:content` | inventory of unanswered interview markers |
-| `npm run check:launch` | the same, but fails if any survive (Phase 11.2) |
+| `npm run check:tells` | the design audit — gradients, arbitrary hex, banned copy |
+| `npm run check:contrast` | WCAG contrast over the token palette |
+| `npm run check:content` | lists open `TODO(sarbajit)` markers |
+| `npm run check:launch` | the same, but fails if any survive |
 
 CI runs all of them on every push and PR.
 
-## Rules that are enforced, not just documented
+## Shape
 
-Tailwind's default palette, shadow scale, radius scale, type scale and font stack are **deleted**
-in `app/globals.css`, not overridden. `bg-indigo-500`, `shadow-lg`, `rounded-2xl` and `text-4xl`
-compile to nothing. What remains:
+One page. `app/page.tsx` carries the hero, the about section and the project
+grid; `/contact` is the only other route with a UI, and `app/api/contact` is the
+only dynamic one. Everything else is prerendered.
 
-- colour: `paper`, `paper-2`, `ink`, `ink-2`, `ink-3`, `rule`, `accent`
-- type: `text-caption` `note` `small` `body` `lead` `h3` `h2` `h1` `display` (12 → 96)
-- radius: `rounded-hair` (2px), `rounded-sm` (4px). There is no larger one.
-
-`npm run check:tells` catches what the token deletion cannot — gradients, `backdrop-filter`,
-arbitrary hex colours, and the banned copy phrases.
-
-There is no `Card` component and there will not be one. Separation is done with
-`1px solid var(--rule)` and whitespace.
-
-## Layout
-
-12 columns. Prose sits in columns 2–8 (`col-prose`), the gutter at 9–12 (`col-gutter`) carries
-dates, stack labels, footnotes and margin notes. Content is not centred.
+There are no per-project routes. A card carries the whole story, which means the
+blurb has to be honest at a glance rather than deferring to a case study.
 
 ## Content
 
-One `.tsx` file per project in `content/projects/`, listed in `content/projects/index.ts`. Each
-file exports its metadata and its prose; the route, the OG image, the index rows and the sitemap
-entry all follow from the register.
+Three files, all typed:
 
-Metadata is checked by the compiler — a typo'd or missing key is a type error, not a runtime
-surprise. What a type cannot express (slug shape, duplicate slugs, the 90-character summary) is
-asserted in the register and throws during prerender, so a malformed project fails the build rather
-than rendering blank. There is no `order` field: the array *is* the order. A `draft: true` project
-neither routes nor appears in any listing.
+- `content/profile.ts` — bio, skills, education, experience
+- `content/projects.ts` — the project cards, in display order
+- `lib/site.ts` — name, role, location, links; anything that appears in more
+  than one place, so metadata, the footer, the sitemap and the OG image can't
+  drift apart
 
-Prose is written with components imported from `components/prose.tsx` — `H2`, `P`, `Quote`,
-`Figure`, `Demo`, `Note` and the rest — so content files carry no class names and no layout
-decisions. `H2` holds the CSS counter that numbers sections in the left margin. Plain `<strong>`,
-`<em>`, `<code>` and `<a>` are styled without an import. Images go through `Figure` or `Demo` only,
-which forces true dimensions and a caption.
+The array *is* the order. Metadata is checked by the compiler — a typo'd or
+missing key is a type error, not a runtime surprise (`types/project.ts`).
 
-Writing guidance for each section is in `content/QUESTIONS.md`, deliberately not in the content
-files: the file you edit is the file that ships.
+Screenshots go in `public/projects/`; see the README there for the crop. A card
+with no `image` renders a lettered placeholder rather than a broken frame.
 
-## Interview markers
+## Rules that are enforced, not just documented
 
-Copy is still the working brief. Every gap is a literal `TODO(sarbajit)` marker, and every body
-that is still a skeleton carries `draftCopy: true`. Either one makes its page render a draft notice
-and be served `noindex, nofollow`, so nothing half-written can be indexed by accident.
-`draftCopy` starts `true`, so publishing unfinished prose has to be deliberate rather than
-forgotten. `npm run check:content` lists what is left.
+Tailwind's default palette, type scale, radius scale and font stack are
+**deleted** in `app/globals.css`, not overridden. `bg-indigo-500` and
+`text-4xl` compile to nothing. What remains:
+
+- colour: `paper`, `paper-2`, `surface`, `ink`, `ink-2`, `ink-3`, `rule`,
+  `rule-strong`, `accent`, `accent-soft`
+- type: `text-caption` `note` `small` `body` `lead` `h3` `h2` `h1` `display`
+- radius: `rounded-sm` `md` `lg` `full`
+
+`npm run check:tells` catches what deleting the tokens cannot — gradients,
+`backdrop-filter`, arbitrary hex colours, and the copy phrases every portfolio
+uses.
+
+Both themes are defined as custom properties on `:root` and swapped by
+`ThemeToggle`; no colour is written anywhere else.
 
 ## Fonts
 
-Fraunces (display, variable axes wired) ships now. Switzer and Commit Mono are licensed downloads
-still to be added; Instrument Sans and JetBrains Mono stand in. Swapping them is a change to
-`app/fonts.ts` alone.
+The whole site is set in Poppins, loaded once in `app/fonts.ts` and fed to the
+`font-display` / `font-body` / `font-mono` variables together. Swapping the
+family is a change to that one file.
 
 ## Deploy
 
-Vercel, framework preset Next.js, Node 24. No build-command override and no output directory to
-set — every page is prerendered and the one dynamic route is `app/api/contact`.
+Vercel, framework preset Next.js, Node 24. No build-command override and no
+output directory to set.
 
-Environment variables (Production and Preview) are listed in `.env.example`. `RESEND_API_KEY`,
-`CONTACT_FROM`, `CONTACT_TO` and `TURNSTILE_SECRET_KEY` are server-side only: they are read in the
-route handler, which no client component imports, and they must never appear under `.next/static`.
+Environment variables (Production and Preview) are listed in `.env.example`.
+`RESEND_API_KEY`, `CONTACT_FROM`, `CONTACT_TO` and `TURNSTILE_SECRET_KEY` are
+server-side only: they are read in the route handler, which no client component
+imports, and they must never appear under `.next/static`.
 
-If DNS stays on Cloudflare, set the record to DNS-only rather than proxied — a proxied record fights
-Vercel's certificate issuance.
+If DNS stays on Cloudflare, set the record to DNS-only rather than proxied — a
+proxied record fights Vercel's certificate issuance.

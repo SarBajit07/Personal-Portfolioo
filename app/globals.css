@@ -1,6 +1,6 @@
-/* Source detection is explicit. Automatic detection would scan BUILD-PLAN.md
-   and scripts/check-tells.mjs — both of which name banned utilities in order to
-   ban them — and helpfully generate the very classes this site forbids. */
+/* Source detection is explicit. Automatic detection would scan
+   scripts/check-tells.mjs — which names banned utilities in order to ban them
+   — and helpfully generate the very classes this site forbids. */
 @import "tailwindcss" source(none);
 @source "../app";
 @source "../components";

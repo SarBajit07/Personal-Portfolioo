@@ -3,7 +3,7 @@ import { z } from "zod";
 /**
  * One schema, used on both sides. The client uses it to show inline errors
  * before a request is made; the route handler re-runs it on the parsed body,
- * because client validation is a courtesy and not a control (TRD §6).
+ * because client validation is a courtesy and not a control.
  */
 export const contactSchema = z.object({
   name: z.string().trim().min(1, "Your name, so I know who wrote.").max(120),
@@ -49,7 +49,7 @@ export interface ContactResponse {
   fields?: Partial<Record<"name" | "email" | "message", string>>;
 }
 
-/** The copy for each failure. Each one says what actually happened (TRD §6). */
+/** The copy for each failure. Each one says what actually happened. */
 export const errorCopy: Record<ContactErrorCode, string> = {
   validation: "Some fields need fixing before this can send.",
   too_large: "That message is too large to accept. Trim it and try again.",

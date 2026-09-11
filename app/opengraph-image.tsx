@@ -15,7 +15,7 @@ export default async function Image() {
     (
       <OgCard
         label={site.name}
-        title="Sign-language translation, B2B commerce, health systems."
+        title="E-commerce, live news, health systems."
         meta={`${site.role} · ${site.location}`}
         serif={display}
       />

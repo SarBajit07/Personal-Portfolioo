@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ProjectCard } from "@/components/ProjectCard";
 import { projects } from "@/content/projects";
+import type { TimelineEntry } from "@/content/profile";
 import { bio, education, experience, skills } from "@/content/profile";
 import { site } from "@/lib/site";
 
@@ -14,7 +15,7 @@ import { site } from "@/lib/site";
  */
 
 const HERO_LINES = [
-  "Full-stack developer",
+  "Full-stack web developer",
   "building things end to end.",
 ] as const;
 
@@ -73,8 +74,9 @@ export default function Home() {
               style={{ ["--rise-index" as string]: HERO_LINES.length + 1 }}
             >
               I&rsquo;m {site.name}, a developer in {site.location}. I write
-              React on the front, Node.js and PostgreSQL behind it, and Python
-              when the problem needs a model rather than an endpoint.
+              Next.js and React on the front, Express.js and PostgreSQL behind
+              it, and Python when the problem needs a model rather than an
+              endpoint.
             </p>
 
             <div
@@ -156,8 +158,9 @@ export default function Home() {
         <p className="label">Projects</p>
         <h2 className="mt-3">Things I&rsquo;ve built</h2>
         <p className="mt-4 max-w-[54ch] text-ink-2">
-          Five projects, newest work first. Client platforms, a sign-language
-          translator, and the agricultural app that got me into machine learning.
+          Four projects, newest work first. Two client platforms built at
+          NTCS, a care platform I tested rather than built, and the agricultural
+          app that got me into machine learning.
         </p>
 
         <div className="mt-12 grid gap-6 md:grid-cols-[repeat(2,minmax(0,1fr))]">
@@ -188,12 +191,7 @@ function TimelineBlock({
   entries,
 }: {
   title: string;
-  entries: readonly {
-    period: string;
-    title: string;
-    organization: string;
-    description: string;
-  }[];
+  entries: readonly TimelineEntry[];
 }) {
   return (
     <div>
@@ -209,6 +207,20 @@ function TimelineBlock({
             <p className="mt-1 font-semibold">{entry.title}</p>
             <p className="text-small text-ink-2">{entry.organization}</p>
             <p className="mt-2 text-small text-ink-3">{entry.description}</p>
+            {/* Named work, where there is any. A role with nothing specific to
+                point at renders the summary alone rather than an empty list. */}
+            {entry.highlights ? (
+              <ul className="mt-3 space-y-2">
+                {entry.highlights.map((highlight) => (
+                  <li
+                    key={highlight.slice(0, 32)}
+                    className="relative pl-4 text-small text-ink-3 before:absolute before:left-0 before:text-ink-3 before:content-['\2014']"
+                  >
+                    {highlight}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
           </div>
         ))}
       </div>
