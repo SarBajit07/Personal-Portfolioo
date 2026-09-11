@@ -8,7 +8,7 @@ type Common = {
 };
 
 const shell =
-  "mt-2 w-full border-0 border-b border-b-rule bg-transparent px-0 py-2 text-body text-ink outline-none placeholder:text-ink-3 focus:border-b-accent";
+  "mt-2 w-full rounded-md border border-rule bg-paper-2 px-3.5 py-2.5 text-body text-ink outline-none transition-colors placeholder:text-ink-3 hover:border-rule-strong focus:border-accent";
 
 function Frame({
   id,
@@ -18,7 +18,7 @@ function Frame({
   children,
 }: Common & { children: React.ReactNode }) {
   return (
-    <div className="mb-8">
+    <div className="mb-6">
       <label htmlFor={id} className="label">
         {label}
       </label>

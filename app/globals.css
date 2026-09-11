@@ -7,64 +7,76 @@
 @source "../lib";
 
 /* ---------------------------------------------------------------------------
-   Tokens — BUILD-PLAN Phase 0.2
-   Warm paper, warm black, one accent. Never #FFF, never #000.
+   Tokens
+
+   Dark, like the previous site, but rebuilt calmer: one accent instead of a
+   three-colour gradient, borders instead of glows, and surfaces that are a
+   lift off the background rather than a blur behind it.
+
+   Dark is the default — it is the site's look, so a first visit always sees the
+   design as intended. [data-theme="light"] is the explicit opt-out, set by the
+   header toggle and remembered in localStorage. Both palettes carry the same
+   token names, so no component knows which theme it is in.
+
+   The semantic names are unchanged from the previous build (paper / ink / rule
+   / accent) so every component keeps working — only the values swap.
    --------------------------------------------------------------------------- */
 
 :root {
-  color-scheme: light;
-
-  --paper: #faf8f3;
-  --paper-2: #f2ede4;
-  --ink: #171512;
-  --ink-2: #4a443c;
-  --ink-3: #8a8177;
-  --rule: #ded6c8;
-  --accent: #9e3d22;
-
-  /* Page geometry. Prose sits in columns 2–8 of 12; it is never centred. */
-  --measure: 66ch;
-  --page-max: 78rem;
-  --page-pad: 1.5rem;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-
-    --paper: #14120f;
-    --paper-2: #1d1a15;
-    --ink: #efe9de;
-    --ink-2: #b9b0a2;
-    --ink-3: #857c70;
-    --rule: #322d26;
-    --accent: #d4703f;
-  }
-}
-
-:root[data-theme="dark"] {
   color-scheme: dark;
 
-  --paper: #14120f;
-  --paper-2: #1d1a15;
-  --ink: #efe9de;
-  --ink-2: #b9b0a2;
-  --ink-3: #857c70;
-  --rule: #322d26;
-  --accent: #d4703f;
+  /* Ground and surfaces */
+  --paper: #0a0a0f;
+  --paper-2: #101017;
+  --surface: rgb(255 255 255 / 2.5%);
+  --surface-hover: rgb(255 255 255 / 5%);
+  --surface-flat: rgb(255 255 255 / 4%);
+
+  /* Text */
+  --ink: #edeef2;
+  --ink-2: #a2a4b0;
+  --ink-3: #6f7280;
+
+  /* Lines */
+  --rule: rgb(255 255 255 / 8%);
+  --rule-strong: rgb(255 255 255 / 14%);
+
+  /* One accent, used for links, focus and the primary action. */
+  --accent: #5b9bf8;
+  --accent-hover: #7db0fa;
+  --accent-ink: #0a0a0f;
+  --accent-soft: rgb(91 155 248 / 12%);
+  --accent-line: rgb(91 155 248 / 30%);
+
+  /* The lettered stand-in on a project with no screenshot yet. */
+  --placeholder-ink: rgb(255 255 255 / 7%);
 }
 
-@media (min-width: 48rem) {
-  :root {
-    --page-pad: 3rem;
-  }
-}
+:root[data-theme="light"] {
+  color-scheme: light;
 
-/* ---------------------------------------------------------------------------
-   Theme — Tailwind's defaults are DELETED, not overridden.
-   If bg-indigo-500 still resolves, it eventually gets used. Same for
-   shadow-lg and rounded-2xl: the utilities do not exist on this site.
-   --------------------------------------------------------------------------- */
+  --paper: #fcfcfd;
+  --paper-2: #f0f1f5;
+  --surface: rgb(16 17 28 / 2.5%);
+  --surface-hover: rgb(16 17 28 / 5%);
+  --surface-flat: rgb(16 17 28 / 4%);
+
+  --ink: #16171c;
+  --ink-2: #52566a;
+  --ink-3: #6e7284;
+
+  --rule: rgb(16 17 28 / 10%);
+  --rule-strong: rgb(16 17 28 / 18%);
+
+  /* Deepened so it still clears 4.5:1 against a white ground. */
+  --accent: #1c5fc9;
+  --accent-hover: #17509f;
+  --accent-ink: #ffffff;
+  --accent-soft: rgb(28 95 201 / 9%);
+  --accent-line: rgb(28 95 201 / 28%);
+
+  --placeholder-ink: rgb(16 17 28 / 9%);
+}
 
 @theme inline {
   --color-*: initial;
@@ -81,31 +93,43 @@
 
   --color-paper: var(--paper);
   --color-paper-2: var(--paper-2);
+  --color-surface: var(--surface);
   --color-ink: var(--ink);
   --color-ink-2: var(--ink-2);
   --color-ink-3: var(--ink-3);
   --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
   --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
 
-  --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
-  --font-body: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-mono-face), ui-monospace, "SF Mono", monospace;
+  /* One family, site-wide. The three names are kept so existing
+     font-display / font-body / font-mono utilities still resolve. */
+  --font-display: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
 
-  /* Hand-tuned scale: 12 14 16 18 21 28 40 64 96.
-     Named for what they are, so nobody reaches for text-4xl by reflex. */
+  /* Conventional scale, tuned down from the editorial build — this reads as a
+     product site now, not a printed page.
+
+     The headings interpolate rather than step at a breakpoint: a 3rem h1 is
+     most of a 320px screen, and a fixed scale with two breakpoints still leaves
+     the sizes between them wrong. Each clamp bottoms out at 320px and reaches
+     its full size at 1024px. Body sizes stay fixed — 16px inputs are what stop
+     iOS zooming on focus, and the small sizes have nowhere to shrink to. */
   --text-caption: 0.75rem;
-  --text-note: 0.875rem;
-  --text-small: 1rem;
-  --text-body: 1.125rem;
-  --text-lead: 1.3125rem;
-  --text-h3: 1.75rem;
-  --text-h2: 2.5rem;
-  --text-h1: 4rem;
-  --text-display: 6rem;
+  --text-note: 0.8125rem;
+  --text-small: 0.9375rem;
+  --text-body: 1rem;
+  --text-lead: clamp(1.0625rem, 1.0179rem + 0.2232vw, 1.125rem);
+  --text-h3: clamp(1.25rem, 1.1607rem + 0.4464vw, 1.375rem);
+  --text-h2: clamp(1.625rem, 1.3571rem + 1.3393vw, 2rem);
+  --text-h1: clamp(2.125rem, 1.5893rem + 2.6786vw, 3rem);
+  --text-display: clamp(2.5rem, 1.6071rem + 4.4643vw, 3.75rem);
 
-  /* border-radius maxes at 4px and is mostly 0. */
-  --radius-hair: 2px;
-  --radius-sm: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 999px;
 }
 
 /* ---------------------------------------------------------------------------
@@ -115,6 +139,15 @@
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* The sticky header must not cover the heading an anchor lands on. */
+    scroll-padding-top: 5.5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
   }
 
   body {
@@ -122,416 +155,387 @@
     color: var(--ink);
     font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
     font-size: var(--text-body);
-    line-height: 1.6;
+    line-height: 1.65;
     text-wrap: pretty;
-    hanging-punctuation: first last;
     -webkit-font-smoothing: antialiased;
-    font-synthesis-weight: none;
+  }
+
+  /* Tailwind's preflight points code/pre/kbd/samp at a monospace stack.
+     The site is one face, so pull them back to Poppins too. */
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: var(--font-mono), ui-sans-serif, system-ui, sans-serif;
   }
 
   h1,
   h2,
   h3 {
-    font-family: var(--font-display), Georgia, serif;
+    font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
     text-wrap: balance;
-    font-weight: 400;
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
 
-  /* Display sizes get the wonky, tight setting. Small sizes do not. */
   h1 {
     font-size: var(--text-h1);
-    line-height: 0.98;
-    letter-spacing: -0.022em;
-    font-variation-settings: "opsz" 144, "SOFT" 0, "WONK" 1;
+    line-height: 1.08;
   }
 
   h2 {
     font-size: var(--text-h2);
-    line-height: 1.05;
-    letter-spacing: -0.018em;
-    font-variation-settings: "opsz" 96, "SOFT" 0, "WONK" 1;
+    line-height: 1.15;
   }
 
   h3 {
     font-size: var(--text-h3);
-    line-height: 1.15;
+    line-height: 1.3;
     letter-spacing: -0.01em;
-    font-variation-settings: "opsz" 32, "SOFT" 0, "WONK" 0;
   }
 
   a {
     color: inherit;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.18em;
+    text-underline-offset: 0.2em;
   }
 
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
-    border-radius: 0;
+    border-radius: 2px;
   }
 
   ::selection {
-    background: var(--accent);
-    color: var(--paper);
-  }
-
-  hr {
-    border: 0;
-    border-top: 1px solid var(--rule);
+    background: var(--accent-soft);
+    color: var(--ink);
   }
 }
 
 /* ---------------------------------------------------------------------------
-   Page geometry — 12 columns, content off-centre (Phase 0.3)
+   Layout
    --------------------------------------------------------------------------- */
 
 @layer components {
   .page {
     width: 100%;
-    max-width: var(--page-max);
+    max-width: 68rem;
     margin-inline: auto;
-    padding-inline: var(--page-pad);
+    padding-inline: 1rem;
   }
 
-  .grid12 {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    column-gap: 1.5rem;
-  }
-
-  @media (min-width: 64rem) {
-    .grid12 {
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      column-gap: 2rem;
+  @media (width >= 30rem) {
+    .page {
+      padding-inline: 1.5rem;
     }
   }
 
-  /* Prose: columns 2–8. Gutter: 9–12. Below lg, both are full width. */
-  .col-prose {
-    grid-column: 1 / -1;
-  }
-
-  .col-gutter {
-    grid-column: 1 / -1;
-  }
-
-  @media (min-width: 64rem) {
-    .col-prose {
-      grid-column: 2 / 9;
-    }
-
-    .col-gutter {
-      grid-column: 9 / 13;
+  @media (width >= 48rem) {
+    .page {
+      padding-inline: 2rem;
     }
   }
 
-  .measure {
-    max-width: var(--measure);
+  /* Every top-level band on the home page. */
+  .section {
+    padding-block: 3.5rem;
+    scroll-margin-top: 4.5rem;
   }
 
-  /* Small-caps metadata label. */
-  .label {
-    font-family: var(--font-mono), ui-monospace, monospace;
-    font-size: var(--text-caption);
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    color: var(--ink-3);
+  @media (width >= 48rem) {
+    .section {
+      padding-block: 5rem;
+    }
   }
 
-  /* Index numeral hangs into the margin (Phase 0.5, fingerprint 1). */
-  .index-numeral {
-    font-family: var(--font-mono), ui-monospace, monospace;
-    font-size: var(--text-caption);
-    color: var(--ink-3);
-    font-variant-numeric: tabular-nums;
+  @media (width >= 64rem) {
+    .section {
+      padding-block: 7rem;
+    }
   }
 
-  .prose-body p {
-    margin-block: 0 1.15em;
-    max-width: var(--measure);
-    color: var(--ink-2);
-  }
-
-  .prose-body p:last-child {
-    margin-bottom: 0;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   Case study body — the components in components/prose.tsx resolve to these.
-   Sections are numbered by a CSS counter and the numeral hangs in the left
-   margin, so the spine of a long article is visible without a sidebar.
-   --------------------------------------------------------------------------- */
-
-@layer components {
-  .case-body {
-    counter-reset: case-section;
-  }
-
-  .case-h2 {
-    position: relative;
-    max-width: var(--measure);
-    margin-block: 3.5rem 1.25rem;
-    padding-top: 1.25rem;
+  .section + .section {
     border-top: 1px solid var(--rule);
   }
-
-  .case-h2::before {
-    counter-increment: case-section;
-    content: counter(case-section, decimal-leading-zero);
-    font-family: var(--font-mono), ui-monospace, monospace;
-    font-size: var(--text-caption);
-    letter-spacing: 0.09em;
-    color: var(--ink-3);
-    display: block;
-    margin-bottom: 0.75rem;
-  }
-
-  @media (min-width: 80rem) {
-    .case-h2::before {
-      position: absolute;
-      left: -4.5rem;
-      top: 1.9rem;
-      margin: 0;
-    }
-  }
-
-  .case-h3 {
-    max-width: var(--measure);
-    margin-block: 2.25rem 0.75rem;
-  }
-
-  .case-p {
-    max-width: var(--measure);
-    margin-block: 0 1.15em;
-    color: var(--ink-2);
-  }
-
-  .case-ul,
-  .case-ol {
-    max-width: var(--measure);
-    margin-block: 0 1.6em;
-    color: var(--ink-2);
-  }
-
-  .case-ul li,
-  .case-ol li {
-    margin-bottom: 0.6em;
-    padding-left: 1.6rem;
-    position: relative;
-  }
-
-  /* An en dash, not a bullet. Bullets in a body of prose read as a slide. */
-  .case-ul li::before {
-    content: "3";
-    position: absolute;
-    left: 0;
-    color: var(--ink-3);
-  }
-
-  .case-ol {
-    counter-reset: case-item;
-  }
-
-  .case-ol li::before {
-    counter-increment: case-item;
-    content: counter(case-item) ".";
-    position: absolute;
-    left: 0;
-    font-family: var(--font-mono), ui-monospace, monospace;
-    font-size: var(--text-note);
-    font-variant-numeric: tabular-nums;
-    color: var(--ink-3);
-  }
-
-  .case-quote {
-    max-width: var(--measure);
-    margin-block: 2.5rem;
-    padding-left: 1.75rem;
-    border-left: 1px solid var(--rule);
-    font-family: var(--font-display), Georgia, serif;
-    font-size: var(--text-lead);
-    line-height: 1.35;
-    color: var(--ink);
-  }
-
-  .case-quote p {
-    margin: 0;
-  }
-
-  .case-code {
-    font-family: var(--font-mono), ui-monospace, monospace;
-    font-size: 0.9em;
-    background: var(--paper-2);
-    padding: 0.1em 0.35em;
-  }
-
-  .case-pre {
-    max-width: var(--measure);
-    margin-block: 2rem;
-    padding: 1rem 1.25rem;
-    overflow-x: auto;
-    border: 1px solid var(--rule);
-    background: var(--paper-2);
-    font-family: var(--font-mono), ui-monospace, monospace;
-    font-size: var(--text-note);
-    line-height: 1.5;
-  }
-
-  .case-pre .case-code {
-    background: none;
-    padding: 0;
-  }
-
-  .case-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: var(--text-small);
-    color: var(--ink-2);
-  }
-
-  .case-table th {
-    text-align: left;
-    font-family: var(--font-mono), ui-monospace, monospace;
-    font-size: var(--text-caption);
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    font-weight: 400;
-    color: var(--ink-3);
-    padding: 0 1.5rem 0.6rem 0;
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .case-table td {
-    padding: 0.7rem 1.5rem 0.7rem 0;
-    border-bottom: 1px solid var(--rule);
-    vertical-align: top;
-  }
-
-  /*
-     Inline elements are styled by descendant selector rather than exported as
-     components, so prose can use plain <strong>, <em>, <code> and <a> without
-     an import. Only block-level pieces need a component, because those carry
-     the section counter and the measure.
-  */
-  .case-body strong {
-    font-weight: 500;
-    color: var(--ink);
-  }
-
-  .case-body em {
-    font-style: italic;
-  }
-
-  .case-body :not(pre) > code {
-    font-family: var(--font-mono), ui-monospace, monospace;
-    font-size: 0.87em;
-    color: var(--ink-2);
-    background: var(--paper-2);
-    padding: 0.1em 0.3em;
-    border: 1px solid var(--rule);
-    border-radius: 2px;
-  }
-
-  .case-body a {
-    color: inherit;
-    text-decoration: underline;
-    text-decoration-color: var(--rule);
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.18em;
-  }
-
-  .case-body a:hover {
-    color: var(--accent);
-    text-decoration-color: var(--accent);
-  }
 }
 
 /* ---------------------------------------------------------------------------
-   About — deliberately airier than a case study (Phase 7 exit criterion).
-   Same element map, different density: no section numerals, no rules between
-   sections, larger body and looser leading.
+   Components
    --------------------------------------------------------------------------- */
 
 @layer components {
-  .about-body .case-h2 {
-    border-top: 0;
-    padding-top: 0;
-    margin-block: 4rem 1rem;
-    font-size: var(--text-h3);
-  }
-
-  .about-body .case-h2::before {
-    content: none;
-  }
-
-  .about-body .case-p {
-    font-size: var(--text-lead);
-    line-height: 1.65;
-    margin-block: 0 1.3em;
-  }
-
-  .about-body .case-quote {
-    font-size: var(--text-body);
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   Motion — the entire budget for the site (Phase 0.4)
-   One load-in: hero lines rise 8px and fade, 40ms stagger. Nothing scrolls in.
-   --------------------------------------------------------------------------- */
-
-@keyframes rise-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-.rise {
-  animation: rise-in 520ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
-  animation-delay: calc(var(--rise-index, 0) * 40ms);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .rise {
-    animation: none;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    transition-duration: 0.001ms !important;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   Print — case studies should survive being printed (Phase 6 exit criterion)
-   --------------------------------------------------------------------------- */
-
-@media print {
-  :root {
-    --paper: #fff;
-    --ink: #000;
-    --ink-2: #222;
-    --ink-3: #555;
-    --rule: #bbb;
-  }
-
-  .no-print {
-    display: none !important;
-  }
-
-  a[href^="http"]::after {
-    content: " (" attr(href) ")";
-    font-size: 0.8em;
+  /* Small uppercase label. Used for section eyebrows and form labels. */
+  .label {
+    display: block;
+    font-size: var(--text-caption);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     color: var(--ink-3);
+  }
+
+  /* The lifted panel the old site called a glass card, without the blur. */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  a.card:hover,
+  .card-interactive:hover {
+    background: var(--surface-hover);
+    border-color: var(--rule-strong);
+  }
+
+  /* Technology chip. */
+  .pill {
+    display: inline-block;
+    padding: 0.1875rem 0.625rem;
+    font-size: var(--text-caption);
+    line-height: 1.5;
+    color: var(--ink-2);
+    background: var(--surface-flat);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+  }
+
+  .pill-accent {
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-color: var(--accent-line);
+  }
+
+  /* Actions. Two only: one filled, one outlined. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.6875rem 1.375rem;
+    font-size: var(--text-small);
+    font-weight: 500;
+    border-radius: var(--radius-full);
+    border: 1px solid transparent;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 600;
+  }
+
+  .btn-primary:hover {
+    background: var(--accent-hover);
+  }
+
+  .btn-primary:disabled {
+    background: var(--ink-3);
+    cursor: not-allowed;
+  }
+
+  .btn-ghost {
+    border-color: var(--rule-strong);
+    color: var(--ink);
+  }
+
+  .btn-ghost:hover {
+    background: var(--surface-hover);
+    border-color: var(--ink-3);
+  }
+
+  /* Availability marker in the hero. A dot, not a pulsing beacon. */
+  .status-dot {
+    width: 0.4375rem;
+    height: 0.4375rem;
+    border-radius: var(--radius-full);
+    background: var(--accent);
+    flex: none;
+  }
+
+  /* Education / experience list. One vertical rule, ticks along it. */
+  .timeline {
+    position: relative;
+    border-left: 1px solid var(--rule);
+    padding-left: 1.5rem;
+  }
+
+  .timeline-item {
+    position: relative;
+  }
+
+  .timeline-item::before {
+    content: "";
+    position: absolute;
+    left: calc(-1.5rem - 3.5px);
+    top: 0.5rem;
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: var(--accent);
+  }
+
+  /* Screenshot frame, and the placeholder that stands in until one exists. */
+  .shot {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper-2);
+  }
+
+  .shot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  .shot-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: var(--text-display);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--placeholder-ink);
+    background:
+      radial-gradient(
+        60% 80% at 50% 0%,
+        var(--accent-soft) 0%,
+        transparent 70%
+      ),
+      var(--paper-2);
+    user-select: none;
+  }
+
+  /* Hero portrait. A 3:4 phone photo cropped to 4:5, biased upward so the
+     face stays in frame as the column narrows. */
+  .portrait {
+    position: relative;
+    width: 100%;
+    max-width: 19rem;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--rule);
+    background: var(--paper-2);
+  }
+
+  .portrait img {
+    object-fit: cover;
+    object-position: 50% 20%;
+  }
+
+  .portrait-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: var(--text-display);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--placeholder-ink);
+    user-select: none;
+  }
+
+  /* Theme switch. Both icons ship; CSS shows the one for the theme you would
+     get by clicking, so there is nothing for React to hydrate and the control
+     is already correct on the first paint. */
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    flex: none;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-full);
+    background: var(--surface);
+    color: var(--ink-2);
+    cursor: pointer;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .theme-toggle:hover {
+    color: var(--ink);
+    background: var(--surface-hover);
+    border-color: var(--rule-strong);
+  }
+
+  .theme-toggle .icon-moon,
+  :root[data-theme="light"] .theme-toggle .icon-sun {
+    display: none;
+  }
+
+  :root[data-theme="light"] .theme-toggle .icon-moon {
+    display: block;
+  }
+
+  /* Cloudflare renders Turnstile as a fixed 300x65 iframe. A 360px phone gives
+     the card about 250px of inside width, so left alone the widget pushes the
+     whole page sideways. Scale it to fit below 24rem; transform leaves the
+     original box height behind, so the margin is trimmed to match. */
+  .cf-turnstile {
+    max-width: 100%;
+  }
+
+  @media (width < 24rem) {
+    .cf-turnstile {
+      transform: scale(0.78);
+      transform-origin: left top;
+      margin-bottom: 1.125rem;
+    }
+  }
+
+  /* Header and footer links are 13-15px text, whose line box alone is about
+     21px — under the 24px WCAG 2.2 target minimum. The padding is what makes
+     them thumb-sized; it is deliberately vertical only, so the rhythm of the
+     bar and the footer row is unchanged. */
+  .nav-link {
+    display: block;
+    padding-block: 0.625rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Motion — one entrance, and only for people who want it.
+   --------------------------------------------------------------------------- */
+
+@layer utilities {
+  .rise {
+    animation: rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    animation-delay: calc(var(--rise-index, 0) * 70ms);
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rise {
+      animation: none;
+    }
   }
 }

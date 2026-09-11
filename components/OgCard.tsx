@@ -1,8 +1,9 @@
 import { ogColours } from "@/lib/og";
+import { site } from "@/lib/site";
 
 /**
  * The OG layout, shared by the site card and the per-project cards. Same
- * grammar as the pages: paper ground, a hairline, a mono label, serif title.
+ * grammar as the pages: dark ground, a hairline, an accent label, Poppins title.
  * Written with inline styles because Satori does not run Tailwind.
  */
 export function OgCard({
@@ -60,7 +61,7 @@ export function OgCard({
         <div style={{ height: 1, background: ogColours.rule, marginBottom: 24 }} />
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 24 }}>
           <span style={{ color: ogColours.ink2 }}>{meta}</span>
-          <span style={{ color: ogColours.ink3 }}>sarbajit.dev</span>
+          <span style={{ color: ogColours.ink3 }}>{new URL(site.url).host}</span>
         </div>
       </div>
     </div>

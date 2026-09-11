@@ -9,53 +9,54 @@ export const metadata: Metadata = {
 };
 
 /**
- * Phase 8.1. The form is never the only route out — the address and the GitHub
- * profile sit beside it, so a broken endpoint is an inconvenience rather than a
- * dead end.
+ * The one route besides the home page. The form is never the only way out —
+ * the address and the GitHub profile sit beside it, so a broken endpoint is an
+ * inconvenience rather than a dead end.
  */
 export default function ContactPage() {
   return (
-    <main id="main" className="page pt-20 pb-16 lg:pt-28">
-      <div className="grid12">
-        <header className="col-span-4 lg:col-span-7">
-          <h1 className="text-h2 lg:text-h1">Contact</h1>
-          <p className="mt-6 max-w-[44ch] text-lead text-ink-2">
-            Work, a question about something on this site, or a correction —
-            all welcome.
-          </p>
-        </header>
-      </div>
+    <main id="main" className="page section">
+      <p className="label">Contact</p>
+      <h1 className="mt-3">Get in touch</h1>
+      <p className="mt-5 max-w-[50ch] text-lead text-ink-2">
+        A role, project work, a question about something on this site, or a
+        correction — all welcome.
+      </p>
 
-      <div className="grid12 mt-16">
-        <div className="col-prose">
+      <div className="mt-14 grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-16">
+        <div className="card p-6 sm:p-8">
           <ContactForm />
         </div>
 
-        <aside className="col-gutter mt-16 lg:mt-0">
-          <p className="label">Or directly</p>
-          <ul className="mt-3 space-y-2">
-            <li>
-              <a
-                href={`mailto:${site.email}`}
-                className="text-note underline decoration-rule underline-offset-4 hover:text-accent"
-              >
-                {site.email}
-              </a>
-            </li>
-            <li>
-              <a
-                href={site.github}
-                rel="noreferrer noopener"
-                className="text-note underline decoration-rule underline-offset-4 hover:text-accent"
-              >
-                GitHub
-              </a>
-            </li>
-          </ul>
-          <p className="mt-6 max-w-[30ch] text-note text-ink-3">
-            Based in {site.location}, which is UTC+5:45 — replies land at odd
-            hours for most of the world.
-          </p>
+        <aside className="space-y-8">
+          <div>
+            <p className="label">Email</p>
+            <a
+              href={`mailto:${site.email}`}
+              className="mt-1 inline-block py-1.5 text-small break-all text-accent no-underline hover:underline"
+            >
+              {site.email}
+            </a>
+          </div>
+
+          <div>
+            <p className="label">GitHub</p>
+            <a
+              href={site.github}
+              rel="noreferrer noopener"
+              className="mt-1 inline-block py-1.5 text-small text-ink-2 no-underline hover:text-ink"
+            >
+              {new URL(site.github).pathname.replace("/", "@")}
+            </a>
+          </div>
+
+          <div>
+            <p className="label">Location</p>
+            <p className="mt-2 text-small text-ink-2">{site.location}, Nepal</p>
+            <p className="mt-2 max-w-[32ch] text-note text-ink-3">
+              UTC+5:45, so replies land at odd hours for most of the world.
+            </p>
+          </div>
         </aside>
       </div>
     </main>

@@ -9,7 +9,7 @@ export const contentType = ogContentType;
 
 export default async function Image() {
   const font = await displayFont();
-  const serif = font ? "Fraunces" : "serif";
+  const display = font ? "Poppins" : "sans-serif";
 
   return new ImageResponse(
     (
@@ -17,13 +17,13 @@ export default async function Image() {
         label={site.name}
         title="Sign-language translation, B2B commerce, health systems."
         meta={`${site.role} · ${site.location}`}
-        serif={serif}
+        serif={display}
       />
     ),
     {
       ...size,
       ...(font
-        ? { fonts: [{ name: "Fraunces", data: font, style: "normal" as const, weight: 400 as const }] }
+        ? { fonts: [{ name: "Poppins", data: font, style: "normal" as const, weight: 600 as const }] }
         : {}),
     },
   );

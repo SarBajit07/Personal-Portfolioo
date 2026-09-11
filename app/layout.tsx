@@ -23,12 +23,22 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
+/**
+ * Applies a remembered light-theme choice before the first paint. Dark is the
+ * default on :root, so this only ever has to *add* the opt-out attribute —
+ * which means a visitor who has never touched the toggle runs no branch at all
+ * and sees no flash either way.
+ */
+const themeScript = `try{if(localStorage.getItem("theme")==="light")document.documentElement.dataset.theme="light"}catch(e){}`;
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={fontVariables}>
+    /* The theme script writes to <html> before React hydrates. */
+    <html lang="en" className={fontVariables} suppressHydrationWarning>
       <body className="flex min-h-screen flex-col">
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-10 focus:bg-paper focus:px-3 focus:py-2 focus:text-small"

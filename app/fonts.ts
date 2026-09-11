@@ -1,33 +1,19 @@
-import { Fraunces, Instrument_Sans, JetBrains_Mono } from "next/font/google";
+import { Poppins } from "next/font/google";
 
 /**
- * Phase 0.1 names Switzer (body) and Commit Mono (metadata), both of which are
- * paid/manual downloads. Instrument Sans and JetBrains Mono are the documented
- * fallbacks and ship first so the system is testable. Swapping in the licensed
- * faces later is a change to this file only: replace the loader with
- * next/font/local and keep the CSS variable names identical.
+ * The whole site is set in Poppins — display, body and metadata alike.
+ * Poppins is a static family, so every weight the CSS asks for has to be
+ * declared here; 400/500/600/700 covers body, UI, and headings.
  *
- * Inter, Poppins and Montserrat are excluded on purpose (Phase 0.5, never #12). tell-audit-ok
+ * One loader feeds all three CSS variables (see globals.css) so the existing
+ * `font-display` / `font-body` / `font-mono` utilities keep resolving.
  */
-
-export const display = Fraunces({
+export const poppins = Poppins({
   subsets: ["latin"],
-  variable: "--font-fraunces",
-  axes: ["SOFT", "WONK", "opsz"],
+  variable: "--font-poppins",
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
-export const body = Instrument_Sans({
-  subsets: ["latin"],
-  variable: "--font-grotesk",
-  display: "swap",
-});
-
-export const mono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono-face",
-  display: "swap",
-  preload: false,
-});
-
-export const fontVariables = `${display.variable} ${body.variable} ${mono.variable}`;
+export const fontVariables = poppins.variable;

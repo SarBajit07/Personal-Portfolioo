@@ -18,8 +18,10 @@ function tokens(block) {
   return out;
 }
 
-const light = tokens(css.slice(css.indexOf(":root {"), css.indexOf("@media (prefers-color-scheme: dark)")));
-const dark = tokens(css.slice(css.indexOf(':root[data-theme="dark"]')));
+// Dark is the default palette and lives on bare :root; light is the opt-out
+// block the header toggle switches to. Both must clear the same thresholds.
+const dark = tokens(css.slice(css.indexOf(":root {"), css.indexOf(':root[data-theme="light"]')));
+const light = tokens(css.slice(css.indexOf(':root[data-theme="light"]'), css.indexOf("@theme inline")));
 
 function luminance(hex) {
   const channels = [1, 3, 5].map((i) => {
@@ -47,7 +49,7 @@ const PAIRS = [
 
 let failed = 0;
 
-for (const [label, theme] of [["light", light], ["dark", dark]]) {
+for (const [label, theme] of [["dark", dark], ["light", light]]) {
   console.log(`\n${label}`);
   for (const [fg, bg, min, use] of PAIRS) {
     const r = ratio(theme[fg], theme[bg]);

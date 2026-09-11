@@ -1,5 +1,5 @@
 /**
- * The OG image is set in the site's own display face rather than a stock
+ * The OG image is set in Poppins, the site's one face, rather than a stock
  * template (Phase 9.2). next/font hands back CSS, not a buffer, so the file is
  * fetched at build time — behind a try/catch, because a link preview falling
  * back to a default face is a far smaller problem than a failed build.
@@ -14,7 +14,7 @@ export async function displayFont(): Promise<ArrayBuffer | null> {
 
   try {
     const css = await fetch(
-      "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@144,400&display=swap",
+      "https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap",
       { headers: { "User-Agent": LEGACY_UA } },
     ).then((r) => r.text());
 
@@ -30,12 +30,13 @@ export async function displayFont(): Promise<ArrayBuffer | null> {
 export const ogSize = { width: 1200, height: 630 } as const;
 export const ogContentType = "image/png";
 
-/** Matches the light theme in globals.css. */
+/** Matches the tokens in globals.css. */
 export const ogColours = {
-  paper: "#faf8f3",
-  ink: "#171512",
-  ink2: "#4a443c",
-  ink3: "#8a8177",
-  rule: "#ded6c8",
-  accent: "#9e3d22",
+  paper: "#0a0a0f",
+  paper2: "#101017",
+  ink: "#edeef2",
+  ink2: "#a2a4b0",
+  ink3: "#6f7280",
+  rule: "#26262f",
+  accent: "#5b9bf8",
 } as const;

@@ -88,7 +88,7 @@ export function ContactForm() {
 
   if (state === "sent") {
     return (
-      <p className="border-t border-t-rule pt-6 text-lead text-ink" role="status">
+      <p className="text-lead text-ink" role="status">
         Sent. I read everything that arrives here and reply to most of it,
         usually within a couple of days.
       </p>
@@ -131,7 +131,7 @@ export function ContactForm() {
         ) : null}
 
         {failure ? (
-          <p role="alert" className="mb-6 max-w-[52ch] border-t border-t-rule pt-4 text-note text-accent">
+          <p role="alert" className="mb-6 max-w-[52ch] rounded-md border border-accent-soft bg-accent-soft px-4 py-3 text-note text-accent">
             {failure}
           </p>
         ) : null}
@@ -139,7 +139,7 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={state === "sending"}
-          className="border-b border-b-ink pb-1 text-body text-ink hover:border-b-accent hover:text-accent disabled:text-ink-3"
+          className="btn btn-primary"
         >
           {state === "sending" ? "Sending…" : "Send"}
         </button>

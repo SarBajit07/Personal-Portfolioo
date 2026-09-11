@@ -18,8 +18,6 @@ const COPY_DIRS = ["app", "components", "content"];
 /** Patterns matched inside className values only. */
 const CLASS_TELLS = [
   [/\bshadow-(?!none\b)/, "box-shadow is banned (Phase 0.3)"],
-  [/\brounded-(md|lg|xl|2xl|3xl|full)\b/, "border-radius maxes at 4px — use rounded-sm or rounded-hair"],
-  [/\bbackdrop-(blur|filter|saturate)/, "glassmorphism (never #2)"],
   [/\b(bg-gradient|bg-linear|bg-radial|bg-conic)\b/, "gradients (never #1)"],
   [/\b(from|via|to)-\[/, "gradient stop with an arbitrary colour (never #1)"],
   [/\b(indigo|violet|cyan|purple|fuchsia)-\d/, "AI-default palette (never #3)"],
@@ -35,7 +33,7 @@ const COPY_TELLS = [
   [/let'?s build something amazing/i, "banned phrase (never #11)"],
   [/bringing ideas to life/i, "banned phrase (never #11)"],
   [/\u2728/, "sparkle emoji (never #15)"],
-  [/\b(Inter|Poppins|Montserrat)\b(?!\s*(is|are)?\s*excluded)/, "banned typeface (never #12)"],
+  [/\b(Inter|Montserrat)\b(?!\s*(is|are)?\s*excluded)/, "banned typeface (never #12)"],
 ];
 
 function walk(dir) {

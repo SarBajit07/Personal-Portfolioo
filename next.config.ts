@@ -9,20 +9,27 @@ import type { NextConfig } from "next";
  * nonce would require middleware on every request. Turnstile is allowed
  * explicitly for the contact form (Phase 8) and nothing else is.
  */
+const isDev = process.env.NODE_ENV === "development";
+
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com",
+  // React's dev build needs eval() for its debugging features (Turbopack HMR
+  // included). Production never gets 'unsafe-eval'.
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://challenges.cloudflare.com`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
-  "connect-src 'self'",
+  // Dev also opens a websocket back to the Turbopack server for HMR.
+  isDev ? "connect-src 'self' ws: wss:" : "connect-src 'self'",
   "frame-src https://challenges.cloudflare.com",
   "form-action 'self'",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "object-src 'none'",
-  "upgrade-insecure-requests",
-].join("; ");
+  isDev ? null : "upgrade-insecure-requests",
+]
+  .filter(Boolean)
+  .join("; ");
 
 const nextConfig: NextConfig = {
   // Pin the workspace root so a stray lockfile elsewhere on the machine is

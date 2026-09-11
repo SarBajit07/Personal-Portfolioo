@@ -1,32 +1,49 @@
 import Link from "next/link";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { nav, site } from "@/lib/site";
 
 /**
- * No logo mark, no centred nav, no sticky bar with a blur behind it. The name
- * sits at the left where a masthead sits, the links run out to the right, and a
- * single hairline separates it from the page.
+ * Sticky, one hairline, no blur panel. The nav links are absolute anchors
+ * ("/#about") rather than bare fragments, so they also work from /contact —
+ * the one page that is not the home page.
+ *
+ * Three links and a switch do not earn a hamburger, so the bar stays one row at
+ * every width and gives way instead: the wordmark drops to the first name below
+ * 640px, and carries `truncate` so that even at 280px it ellipsises rather than
+ * pushing the page sideways.
  */
 export function SiteHeader() {
+  const shortName = site.name.split(" ")[0] ?? site.name;
+
   return (
-    <header className="border-b border-b-rule">
-      <div className="page flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2 py-5">
-        <Link href="/" className="text-small no-underline hover:text-accent">
-          {site.name}
+    <header className="sticky top-0 z-20 border-b border-b-rule bg-paper/85 backdrop-blur-sm">
+      <div className="page flex h-16 items-center justify-between gap-3 sm:gap-6">
+        <Link
+          href="/"
+          className="min-w-0 truncate text-small font-semibold no-underline hover:text-accent"
+        >
+          <span className="sm:hidden">{shortName}</span>
+          <span className="hidden sm:inline">{site.name}</span>
         </Link>
-        <nav aria-label="Primary">
-          <ul className="flex gap-6">
-            {nav.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="label no-underline hover:text-accent hover:underline hover:underline-offset-4"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+
+        <div className="flex shrink-0 items-center gap-3 sm:gap-5">
+          <nav aria-label="Primary">
+            <ul className="flex items-center gap-4 text-note sm:gap-7 sm:text-small">
+              {nav.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="nav-link text-ink-2 no-underline hover:text-ink"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );
