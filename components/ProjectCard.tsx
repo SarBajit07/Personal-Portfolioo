@@ -10,8 +10,8 @@ import type { Project } from "@/types/project";
  * than a dead "#" href, which is what the previous site shipped.
  */
 export function ProjectCard({ project }: { project: Project }) {
-  const { title, blurb, stack, image, live, repo, year } = project;
-  const hasLinks = Boolean(live ?? repo);
+  const { title, blurb, stack, image, live, alsoLive, repo, year } = project;
+  const hasLinks = Boolean(live ?? repo ?? alsoLive?.length);
 
   return (
     <article className="card card-interactive flex min-w-0 flex-col overflow-hidden">
@@ -57,6 +57,17 @@ export function ProjectCard({ project }: { project: Project }) {
                 Live site
               </a>
             ) : null}
+            {/* A project can ship as several sites; each gets its own name. */}
+            {alsoLive?.map(({ label, href }) => (
+              <a
+                key={href}
+                href={href}
+                rel="noreferrer noopener"
+                className="text-small font-medium text-accent no-underline hover:underline"
+              >
+                {label}
+              </a>
+            ))}
             {repo ? (
               <a
                 href={repo}

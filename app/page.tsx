@@ -158,9 +158,10 @@ export default function Home() {
         <p className="label">Projects</p>
         <h2 className="mt-3">Things I&rsquo;ve built</h2>
         <p className="mt-4 max-w-[54ch] text-ink-2">
-          Four projects, newest work first. Two client platforms built at
-          NTCS, a care platform I tested rather than built, and the agricultural
-          app that got me into machine learning.
+          Five projects, newest work first. Two client platforms built at
+          NTCS, a three-site frontend for a production house, a care platform I
+          tested rather than built, and the agricultural app that got me into
+          machine learning.
         </p>
 
         <div className="mt-12 grid gap-6 md:grid-cols-[repeat(2,minmax(0,1fr))]">

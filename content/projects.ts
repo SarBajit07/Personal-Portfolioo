@@ -5,9 +5,10 @@ import type { Project } from "@/types/project";
  * more — a card carries the whole story, so it has to be honest at a glance.
  *
  * Blurbs and stacks come from the NTCS work (Nonamart, 24 Ghanta Nepal), the
- * client QA engagement (Parivar) and the old portfolio's API (Krishi Saathi).
- * Links were not recorded for all of them, so `live`, `repo` and `year` are
- * left off rather than guessed — a card simply omits what it doesn't know.
+ * client QA engagement (Parivar), the Pana Productions frontend build and the
+ * old portfolio's API (Krishi Saathi). Links were not recorded for all of them,
+ * so `live` and `repo` are left off rather than guessed — a card simply omits
+ * what it doesn't know.
  *
  * TODO(sarbajit): screenshots for Nonamart and Krishi Saathi. Drop a file in
  * public/projects/ and set `image` to its path; until then a card renders a
@@ -20,6 +21,11 @@ export const projects: readonly Project[] = [
     blurb:
       "An e-commerce marketplace built at NTCS. I worked the backend and the performance side of it: real-time currency exchange handling that has to stay correct across a session, and optimisations to the product and cart data flows that carry the checkout.",
     stack: ["Next.js", "Express.js", "PostgreSQL", "Tailwind CSS"],
+    /* Checked 2026-09-11: the domain resolves, but the Nonamart deployment is
+       not on it — the host answers every name with its default vhost, whose
+       certificate is issued for thimar.com, so a browser warns before showing
+       an unrelated site. Kept live at Sarbajit's request; worth re-checking. */
+    live: "https://nonamart.com/",
     year: "2026",
     featured: true,
   },
@@ -35,6 +41,21 @@ export const projects: readonly Project[] = [
     featured: true,
   },
   {
+    slug: "pana-productions",
+    title: "Pana Productions",
+    blurb:
+      "A Kathmandu creative production house that needed three sites rather than one, and I built the frontend for all of them. The main site carries the whole studio — events, commercial shoots, film making, digital — while Pana Events sits on its own domain for weddings and ceremonies, with a selected-work gallery of the films, and Pana Studio sells the pre-lit rooms themselves: the chroma set, the talk set, what is already rigged before a client walks in. Three front ends on one identity, carrying a lot of full-bleed video and photography that still has to load fast on a Nepali mobile connection.",
+    stack: ["Next.js", "React", "Tailwind CSS"],
+    image: "/projects/pana-productions.jpg",
+    live: "https://panaproductions.com.np/",
+    alsoLive: [
+      { label: "Pana Events", href: "https://events.panaproductions.com.np/" },
+      { label: "Pana Studio", href: "https://studio.panaproductions.com.np/" },
+    ],
+    year: "2026",
+    featured: true,
+  },
+  {
     slug: "parivar",
     title: "Parivar",
     blurb:
@@ -44,6 +65,7 @@ export const projects: readonly Project[] = [
     stack: ["Manual QA", "Functional testing", "Multi-portal flows"],
     image: "/projects/parivar.jpg",
     live: "https://parivar.com.au/",
+    year: "2026",
     featured: true,
   },
   {
@@ -52,6 +74,7 @@ export const projects: readonly Project[] = [
     blurb:
       "An agricultural web app giving farmers real-time market prices, crop disease detection from a photo, and expert advice in one place. The disease model is where I first worked in PyTorch.",
     stack: ["React", "Tailwind CSS", "PyTorch", "MongoDB"],
+    year: "2025",
     featured: false,
   },
 ];

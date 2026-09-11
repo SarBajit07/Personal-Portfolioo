@@ -1,3 +1,10 @@
+/** A named link to something running. */
+export interface LiveSite {
+  /** What the visitor clicks, e.g. "Pana Events". */
+  readonly label: string;
+  readonly href: string;
+}
+
 /**
  * The shape of a project card.
  *
@@ -18,6 +25,11 @@ export interface Project {
   readonly image?: string;
   /** Absolute URL to the running thing. */
   readonly live?: string;
+  /**
+   * Further live surfaces, for a project that shipped as more than one site.
+   * Each needs its own label because "Live site" twice tells a visitor nothing.
+   */
+  readonly alsoLive?: readonly LiveSite[];
   /** Absolute URL to the repository. */
   readonly repo?: string;
   /** e.g. "2025". Rendered in the card corner when present. */
