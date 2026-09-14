@@ -1,4 +1,4 @@
-# sarbajit.dev
+# sarbajit.com.np
 
 Portfolio site. Next.js App Router, deployed to Vercel.
 
