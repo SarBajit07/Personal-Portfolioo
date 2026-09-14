@@ -1,7 +1,7 @@
 import { education, skills } from "@/content/profile";
 import { projects } from "@/content/projects";
 import { findPortrait } from "@/lib/portrait";
-import { absolute, site } from "@/lib/site";
+import { absolute, nameVariants, profiles, site } from "@/lib/site";
 
 /**
  * JSON-LD for the site (Phase 10 — SEO).
@@ -38,19 +38,32 @@ function person(): Node {
     "@type": "Person",
     "@id": ids.person,
     name: site.name,
+    /* Split out as well as given whole. A name query is matched against the
+       entity, and spelling out the parts is what lets Google treat "Timalsina"
+       on its own as this person's surname rather than an unparsed token. */
+    givenName: "Sarbajit",
+    familyName: "Timalsina",
+    alternateName: [...nameVariants],
     url: absolute("/"),
+    /* Names the page this Person is the subject of. Without it the Person is a
+       free-floating node; with it, the home page *is* the page about Sarbajit
+       Timalsina, which is precisely what a search for the name is asking for. */
+    mainEntityOfPage: ref(ids.home),
     jobTitle: site.role,
     description: site.description,
     email: `mailto:${site.email}`,
+    knowsLanguage: ["en", "ne"],
     ...(portrait ? { image: absolute(portrait) } : {}),
     address: {
       "@type": "PostalAddress",
       addressLocality: site.location,
       addressCountry: site.country,
     },
-    /* The one profile the site actually links to. Listing accounts that are not
-       on the page would be an unverifiable claim. */
-    sameAs: [site.github],
+    /* Every profile the site actually links to, and only those. This is the
+       strongest signal available for a name query: it is how Google decides
+       that this site, the LinkedIn profile and the GitHub account are one
+       person rather than three, and consolidates their authority here. */
+    sameAs: profiles.map((profile) => profile.href),
     knowsAbout: skills.flatMap((group) => [...group.items]),
     alumniOf: education.map((entry) => ({
       "@type": "CollegeOrUniversity",
@@ -119,11 +132,19 @@ export function homeGraph(): Node {
   };
 }
 
-/** Contact: the page, plus the breadcrumb that makes it legible in a result. */
+/**
+ * Contact: the page, plus the breadcrumb that makes it legible in a result.
+ *
+ * The Person is emitted here too rather than only referenced. `about` pointed
+ * at an @id that existed only in the home page's graph, which left the node
+ * dangling for any crawler that fetched this page on its own — and it is the
+ * Person, with its `sameAs`, that a search for the name needs to resolve.
+ */
 export function contactGraph(): Node {
   return {
     "@context": "https://schema.org",
     "@graph": [
+      person(),
       {
         "@type": "ContactPage",
         "@id": ids.contact,

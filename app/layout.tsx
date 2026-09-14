@@ -39,6 +39,20 @@ export const metadata: Metadata = {
   creator: site.name,
   publisher: site.name,
   category: "technology",
+  /* Search Console's HTML-tag verification, read from the environment so the
+     token is set once on Vercel rather than committed. Absent locally, in which
+     case Next omits the tag entirely rather than emitting an empty one.
+
+     Verification is not a ranking factor — it is how you get told what Google
+     actually did with the site, and how you request indexing rather than wait
+     for it. */
+  ...(process.env["NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION"]
+    ? {
+        verification: {
+          google: process.env["NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION"],
+        },
+      }
+    : {}),
 };
 
 /**

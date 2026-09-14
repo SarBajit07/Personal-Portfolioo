@@ -15,6 +15,15 @@ import { site } from "@/lib/site";
  * is what the previous site did and what this one is going back to.
  */
 
+/**
+ * The tagline, under the name in the h1.
+ *
+ * The name is the h1's first line and is not in this array: an <h1> is the one
+ * heading a search engine weights as the page's subject, and this page's
+ * subject is a person, not a job description. Before, the name appeared first
+ * in body copy — so the strongest signal on the page said "full-stack web
+ * developer" to a query that was asking about Sarbajit Timalsina.
+ */
 const HERO_LINES = [
   "Full-stack web developer",
   "building things end to end.",
@@ -32,11 +41,17 @@ export default function Home() {
         <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-16">
           <div>
             <h1 className="max-w-[18ch]">
+              <span
+                className="rise block"
+                style={{ ["--rise-index" as string]: 0 }}
+              >
+                {site.name}
+              </span>
               {HERO_LINES.map((line, i) => (
                 <span
                   key={line}
-                  className="rise block"
-                  style={{ ["--rise-index" as string]: i }}
+                  className="rise mt-1 block text-h2 text-ink-2"
+                  style={{ ["--rise-index" as string]: i + 1 }}
                 >
                   {line}
                 </span>
@@ -45,17 +60,16 @@ export default function Home() {
 
             <p
               className="rise mt-6 max-w-[52ch] text-lead text-ink-2"
-              style={{ ["--rise-index" as string]: HERO_LINES.length }}
+              style={{ ["--rise-index" as string]: HERO_LINES.length + 1 }}
             >
-              I&rsquo;m {site.name}, a developer in {site.location}. I write
-              Next.js and React on the front, Express.js and PostgreSQL behind
-              it, and Python when the problem needs a model rather than an
-              endpoint.
+              I&rsquo;m a developer in {site.location}, Nepal. I write Next.js
+              and React on the front, Express.js and PostgreSQL behind it, and
+              Python when the problem needs a model rather than an endpoint.
             </p>
 
             <div
               className="rise mt-9 flex flex-wrap gap-3"
-              style={{ ["--rise-index" as string]: HERO_LINES.length + 1 }}
+              style={{ ["--rise-index" as string]: HERO_LINES.length + 2 }}
             >
               <Link href="/#projects" className="btn btn-primary">
                 View my work
@@ -68,7 +82,7 @@ export default function Home() {
 
           <div
             className="rise portrait justify-self-start lg:justify-self-end"
-            style={{ ["--rise-index" as string]: HERO_LINES.length + 2 }}
+            style={{ ["--rise-index" as string]: HERO_LINES.length + 3 }}
           >
             {portrait ? (
               <Image

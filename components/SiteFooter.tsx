@@ -1,6 +1,23 @@
 import Link from "next/link";
-import { ChatIcon, GitHubIcon, MailIcon } from "@/components/Icons";
-import { site } from "@/lib/site";
+import {
+  ChatIcon,
+  GitHubIcon,
+  InstagramIcon,
+  LinkedInIcon,
+  MailIcon,
+} from "@/components/Icons";
+import { profiles, site } from "@/lib/site";
+
+/** Keyed by the labels in `profiles`, so adding one there is a type error here
+    until it is given a mark. */
+const PROFILE_ICONS: Record<
+  (typeof profiles)[number]["label"],
+  (props: { className?: string }) => React.ReactNode
+> = {
+  LinkedIn: LinkedInIcon,
+  GitHub: GitHubIcon,
+  Instagram: InstagramIcon,
+};
 
 /**
  * Name, where, how to reach a person. Not a sitemap.
@@ -26,16 +43,25 @@ export function SiteFooter() {
               Email
             </a>
           </li>
-          <li>
-            <a
-              href={site.github}
-              rel="noreferrer noopener"
-              className="nav-link flex items-center gap-2 text-small text-ink-2 no-underline hover:text-ink"
-            >
-              <GitHubIcon className="size-4" />
-              GitHub
-            </a>
-          </li>
+          {/* Driven by the same list as the `sameAs` in the structured data,
+              so a profile can never be claimed there without being linked
+              here. `me` is the relevant rel: it says these identities are the
+              same person, which is exactly the claim being made. */}
+          {profiles.map(({ label, href }) => {
+            const Icon = PROFILE_ICONS[label];
+            return (
+              <li key={label}>
+                <a
+                  href={href}
+                  rel="me noreferrer noopener"
+                  className="nav-link flex items-center gap-2 text-small text-ink-2 no-underline hover:text-ink"
+                >
+                  <Icon className="size-4" />
+                  {label}
+                </a>
+              </li>
+            );
+          })}
           <li>
             <Link
               href="/contact/"

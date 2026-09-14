@@ -1,9 +1,24 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
-import { GitHubIcon, MailIcon, PinIcon } from "@/components/Icons";
+import {
+  GitHubIcon,
+  InstagramIcon,
+  LinkedInIcon,
+  MailIcon,
+  PinIcon,
+} from "@/components/Icons";
 import { JsonLd } from "@/components/JsonLd";
 import { contactGraph } from "@/lib/schema";
-import { site } from "@/lib/site";
+import { profiles, site } from "@/lib/site";
+
+const PROFILE_ICONS: Record<
+  (typeof profiles)[number]["label"],
+  (props: { className?: string }) => React.ReactNode
+> = {
+  LinkedIn: LinkedInIcon,
+  GitHub: GitHubIcon,
+  Instagram: InstagramIcon,
+};
 
 /* The old description was four words and said nothing a searcher could match
    on. This one carries the role and the city, which is what someone typing
@@ -80,21 +95,29 @@ export default function ContactPage() {
               </dd>
             </div>
 
-            <div className="border-b border-rule py-5">
-              <dt className="label flex items-center gap-2">
-                <GitHubIcon className="size-4 text-ink-3" />
-                GitHub
-              </dt>
-              <dd className="mt-1.5 pl-6">
-                <a
-                  href={site.github}
-                  rel="noreferrer noopener"
-                  className="text-small text-ink-2 no-underline hover:text-ink"
-                >
-                  {new URL(site.github).pathname.replace("/", "@")}
-                </a>
-              </dd>
-            </div>
+            {/* Same list as the footer and the `sameAs` in the structured
+                data — one source, so a profile is never claimed anywhere it is
+                not also linked. */}
+            {profiles.map(({ label, href, handle }) => {
+              const Icon = PROFILE_ICONS[label];
+              return (
+                <div key={label} className="border-b border-rule py-5">
+                  <dt className="label flex items-center gap-2">
+                    <Icon className="size-4 text-ink-3" />
+                    {label}
+                  </dt>
+                  <dd className="mt-1.5 pl-6">
+                    <a
+                      href={href}
+                      rel="me noreferrer noopener"
+                      className="text-small text-ink-2 no-underline hover:text-ink"
+                    >
+                      {handle}
+                    </a>
+                  </dd>
+                </div>
+              );
+            })}
 
             <div className="border-b border-rule py-5">
               <dt className="label flex items-center gap-2">
