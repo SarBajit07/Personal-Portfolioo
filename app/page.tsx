@@ -7,7 +7,7 @@ import type { TimelineEntry } from "@/content/profile";
 import { bio, education, experience, skills } from "@/content/profile";
 import { findPortrait } from "@/lib/portrait";
 import { homeGraph } from "@/lib/schema";
-import { site } from "@/lib/site";
+import { resume, site } from "@/lib/site";
 
 /**
  * The whole portfolio, minus the contact form: hero, about, projects. Sections
@@ -77,6 +77,16 @@ export default function Home() {
               <Link href="/contact/" className="btn btn-ghost">
                 Get in touch
               </Link>
+              {/* A real file, not a route: a plain anchor, so it is never
+                  handed to the client router. `download` saves it under the
+                  name in `resume` rather than the URL's last segment. */}
+              <a
+                href={resume.path}
+                download={resume.filename}
+                className="btn btn-ghost"
+              >
+                {resume.label}
+              </a>
             </div>
           </div>
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
 import {
+  DownloadIcon,
   GitHubIcon,
   InstagramIcon,
   LinkedInIcon,
@@ -9,7 +10,7 @@ import {
 } from "@/components/Icons";
 import { JsonLd } from "@/components/JsonLd";
 import { contactGraph } from "@/lib/schema";
-import { profiles, site } from "@/lib/site";
+import { profiles, resume, site } from "@/lib/site";
 
 const PROFILE_ICONS: Record<
   (typeof profiles)[number]["label"],
@@ -76,8 +77,8 @@ export default function ContactPage() {
 
           {/*
             Each icon sits in the label row and the value is indented to clear
-            it — 1rem of icon plus the 0.5rem gap — so the three values line up
-            with each other rather than stepping out under their own marks.
+            it — 1rem of icon plus the 0.5rem gap — so the values line up with
+            each other rather than stepping out under their own marks.
           */}
           <dl className="mt-6 border-t border-rule">
             <div className="border-b border-rule py-5">
@@ -118,6 +119,24 @@ export default function ContactPage() {
                 </div>
               );
             })}
+
+            {/* A file rather than a way of reaching a person, but this is the
+                page someone lands on when they want either. */}
+            <div className="border-b border-rule py-5">
+              <dt className="label flex items-center gap-2">
+                <DownloadIcon className="size-4 text-ink-3" />
+                CV
+              </dt>
+              <dd className="mt-1.5 pl-6">
+                <a
+                  href={resume.path}
+                  download={resume.filename}
+                  className="text-small text-accent no-underline hover:underline"
+                >
+                  {resume.label} (PDF)
+                </a>
+              </dd>
+            </div>
 
             <div className="border-b border-rule py-5">
               <dt className="label flex items-center gap-2">

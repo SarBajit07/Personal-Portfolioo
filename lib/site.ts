@@ -47,6 +47,24 @@ export const site = {
 } as const;
 
 /**
+ * The downloadable CV.
+ *
+ * `path` is the file as served from public/, and `filename` is the name the
+ * browser saves it under — they are the same string today, but the `download`
+ * attribute is what guarantees a visitor gets a named file rather than
+ * whatever the URL's last segment happens to be if the file is ever renamed.
+ *
+ * The PDF is generated from a standalone `resume.html` kept outside this repo
+ * (see public/README.md); regenerate it straight into public/ so there is never
+ * a second, staler copy to pick from.
+ */
+export const resume = {
+  path: "/Sarbajit-Timalsina-Resume.pdf",
+  filename: "Sarbajit-Timalsina-Resume.pdf",
+  label: "Download CV",
+} as const;
+
+/**
  * The off-site profiles, in one list so the footer, the contact page and the
  * `sameAs` in the structured data cannot drift apart.
  *
