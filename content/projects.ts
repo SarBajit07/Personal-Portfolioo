@@ -33,7 +33,7 @@ export const projects: readonly Project[] = [
     slug: "24-ghanta-nepal",
     title: "24 Ghanta Nepal",
     blurb:
-      "A live Nepali news platform I worked on with the team at NTCS. Editors file into desks — politics, society, sports, technology, long-form research — and stories carry bylines, read times, and breaking flags that have to surface within minutes. The read path is nearly all of the traffic, so the work was keeping it fast under a constant stream of new articles.",
+      "A live Nepali news platform I worked on with the team at NTCS. Editors file into desks: politics, society, sports, technology, long-form research. Stories carry bylines, read times, and breaking flags that have to surface within minutes. The read path is nearly all of the traffic, so the work was keeping it fast under a constant stream of new articles.",
     stack: ["Next.js", "Express.js", "PostgreSQL"],
     image: "/projects/24-ghanta-nepal.jpg",
     live: "https://24ghantanepal.com/",
@@ -44,7 +44,7 @@ export const projects: readonly Project[] = [
     slug: "pana-productions",
     title: "Pana Productions",
     blurb:
-      "A Kathmandu creative production house that needed three sites rather than one, and I built the frontend for all of them. The main site carries the whole studio — events, commercial shoots, film making, digital — while Pana Events sits on its own domain for weddings and ceremonies, with a selected-work gallery of the films, and Pana Studio sells the pre-lit rooms themselves: the chroma set, the talk set, what is already rigged before a client walks in. Three front ends on one identity, carrying a lot of full-bleed video and photography that still has to load fast on a Nepali mobile connection.",
+      "A Kathmandu creative production house that needed three sites rather than one, and I built the frontend for all of them. The main site carries the whole studio (events, commercial shoots, film making, digital), while Pana Events sits on its own domain for weddings and ceremonies, with a selected-work gallery of the films, and Pana Studio sells the pre-lit rooms themselves: the chroma set, the talk set, what is already rigged before a client walks in. Three front ends on one identity, carrying a lot of full-bleed video and photography that still has to load fast on a Nepali mobile connection.",
     stack: ["Next.js", "React", "Tailwind CSS"],
     image: "/projects/pana-productions.jpg",
     live: "https://panaproductions.com.np/",
@@ -59,7 +59,7 @@ export const projects: readonly Project[] = [
     slug: "parivar",
     title: "Parivar",
     blurb:
-      "A cross-border healthcare platform, built for a client. Family members abroad subscribe to arrange in-home nursing visits for elderly parents in Nepal, read the clinical reports that come back, coordinate with hospitals, and put questions to an AI assistant. Three more roles sit behind that one: field nurses running the visits and capturing vitals, doctors giving remote clinical oversight, admins running operations. I wasn’t on the build here — I was the manual QA, working every portal feature by feature, from nurse sign-up and KYC verification through the visit, vitals and reporting flows.",
+      "A cross-border healthcare platform, built for a client. Family members abroad subscribe to arrange in-home nursing visits for elderly parents in Nepal, read the clinical reports that come back, coordinate with hospitals, and put questions to an AI assistant. Three more roles sit behind that one: field nurses running the visits and capturing vitals, doctors giving remote clinical oversight, admins running operations. I wasn’t on the build here. I was the manual QA, working every portal feature by feature, from nurse sign-up and KYC verification through the visit, vitals and reporting flows.",
     /* Not a stack. Listing one would claim authorship of a codebase I tested
        rather than wrote — these are the shape of the contribution instead. */
     stack: ["Manual QA", "Functional testing", "Multi-portal flows"],

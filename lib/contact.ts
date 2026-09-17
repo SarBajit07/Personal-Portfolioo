@@ -15,7 +15,7 @@ export const contactSchema = z.object({
   message: z
     .string()
     .trim()
-    .min(10, "A little more than that — ten characters at minimum.")
+    .min(10, "A little more than that. Ten characters at minimum.")
     .max(5000, "Under 5000 characters, please."),
   /** Honeypot. Real people never see this field, so it must arrive empty. */
   company: z.string().max(0).optional().default(""),
@@ -60,5 +60,5 @@ export const errorCopy: Record<ContactErrorCode, string> = {
   unconfigured:
     "The form is not connected to its mail service yet. Email me directly in the meantime.",
   upstream:
-    "The mail service rejected the message — that is my end, not yours. Email me directly and I will chase it.",
+    "The mail service rejected the message. That is my end, not yours. Email me directly and I will chase it.",
 };

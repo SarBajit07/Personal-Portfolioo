@@ -3,7 +3,7 @@ import { OgCard } from "@/components/OgCard";
 import { displayFont, ogContentType, ogSize } from "@/lib/og";
 import { site } from "@/lib/site";
 
-export const alt = `${site.name} — ${site.role}`;
+export const alt = `${site.name} · ${site.role}`;
 export const size = ogSize;
 export const contentType = ogContentType;
 

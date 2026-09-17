@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contact/" },
   openGraph: {
     type: "profile",
-    title: `Contact — ${site.name}`,
+    title: `Contact · ${site.name}`,
     description,
     url: "/contact/",
   },
@@ -56,7 +56,7 @@ export default function ContactPage() {
       <h1 className="mt-3">Get in touch</h1>
       <p className="mt-5 max-w-[50ch] text-lead text-ink-2">
         A role, project work, a question about something on this site, or a
-        correction — all welcome.
+        correction. All welcome.
       </p>
 
       <div className="mt-14 grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-16">

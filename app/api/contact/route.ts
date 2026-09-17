@@ -117,7 +117,7 @@ export async function POST(request: Request): Promise<Response> {
       from,
       to,
       reply_to: email,
-      subject: `Portfolio — ${name}`,
+      subject: `Portfolio: ${name}`,
       text: [`From: ${name} <${email}>`, "", message].join("\n"),
     }),
   });

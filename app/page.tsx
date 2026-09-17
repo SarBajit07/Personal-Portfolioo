@@ -213,7 +213,7 @@ function TimelineBlock({
                 {entry.highlights.map((highlight) => (
                   <li
                     key={highlight.slice(0, 32)}
-                    className="relative pl-4 text-small text-ink-3 before:absolute before:left-0 before:text-ink-3 before:content-['\2014']"
+                    className="relative pl-4 text-small text-ink-3 before:absolute before:left-0 before:text-ink-3 before:content-['\2013']"
                   >
                     {highlight}
                   </li>
