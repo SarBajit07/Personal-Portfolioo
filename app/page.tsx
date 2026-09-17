@@ -115,11 +115,11 @@ export default function Home() {
 
       {/* --------------------------------------------------------------- About */}
       <section id="about" className="section page">
-        <p className="label">About</p>
-        <h2 className="mt-3">A little background</h2>
+        <p className="label reveal">About</p>
+        <h2 className="reveal mt-3">A little background</h2>
 
         <div className="mt-8 grid gap-x-16 gap-y-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
-          <div className="space-y-4">
+          <div className="reveal space-y-4">
             {bio.map((paragraph) => (
               <p key={paragraph.slice(0, 32)} className="text-ink-2">
                 {paragraph}
@@ -127,7 +127,7 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="space-y-8">
+          <div className="reveal space-y-8">
             {skills.map((group) => (
               <div key={group.category}>
                 <h3 className="text-small font-semibold tracking-wide text-ink uppercase">
@@ -153,9 +153,9 @@ export default function Home() {
 
       {/* ------------------------------------------------------------ Projects */}
       <section id="projects" className="section page">
-        <p className="label">Projects</p>
-        <h2 className="mt-3">Things I&rsquo;ve built</h2>
-        <p className="mt-4 max-w-[54ch] text-ink-2">
+        <p className="label reveal">Projects</p>
+        <h2 className="reveal mt-3">Things I&rsquo;ve built</h2>
+        <p className="reveal mt-4 max-w-[54ch] text-ink-2">
           Five projects, newest work first. Two client platforms built at
           NTCS, a three-site frontend for a production house, a care platform I
           tested rather than built, and the agricultural app that got me into
@@ -163,12 +163,12 @@ export default function Home() {
         </p>
 
         <div className="mt-12 grid gap-6 md:grid-cols-[repeat(2,minmax(0,1fr))]">
-          {projects.map((project) => (
-            <ProjectCard key={project.slug} project={project} />
+          {projects.map((project, i) => (
+            <ProjectCard key={project.slug} project={project} index={i} />
           ))}
         </div>
 
-        <div className="card mt-12 flex flex-col items-start justify-between gap-6 p-8 sm:flex-row sm:items-center">
+        <div className="card reveal mt-12 flex flex-col items-start justify-between gap-6 p-8 sm:flex-row sm:items-center">
           <div>
             <h3>Working on something?</h3>
             <p className="mt-2 max-w-[44ch] text-small text-ink-2">
@@ -193,7 +193,7 @@ function TimelineBlock({
   entries: readonly TimelineEntry[];
 }) {
   return (
-    <div>
+    <div className="reveal">
       <h3 className="text-small font-semibold tracking-wide text-ink uppercase">
         {title}
       </h3>

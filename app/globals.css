@@ -294,7 +294,8 @@
     border-radius: var(--radius-lg);
     transition:
       border-color 0.2s ease,
-      background-color 0.2s ease;
+      background-color 0.2s ease,
+      transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   a.card:hover,
@@ -338,7 +339,8 @@
     transition:
       background-color 0.2s ease,
       border-color 0.2s ease,
-      color 0.2s ease;
+      color 0.2s ease,
+      transform 0.2s ease;
   }
 
   .btn-primary {
@@ -512,35 +514,162 @@
      them thumb-sized; it is deliberately vertical only, so the rhythm of the
      bar and the footer row is unchanged. */
   .nav-link {
+    position: relative;
     display: block;
     padding-block: 0.625rem;
+  }
+
+  /* A hairline drawn in from the left on hover, rather than an underline
+     switched on all at once. It is a pseudo-element for that reason, and
+     because text-decoration is already spoken for: these links carry
+     `no-underline`, so animating the real underline would mean fighting it. */
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0.45rem;
+    height: 1px;
+    background: currentColor;
+    scale: 0 1;
+    transform-origin: left;
+    transition: scale 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .nav-link:hover::after {
+    scale: 1 1;
   }
 }
 
 /* ---------------------------------------------------------------------------
-   Motion — one entrance, and only for people who want it.
+   Motion
+
+   Three kinds, and none of them for a visitor who has asked not to be moved:
+   the hero enters on load, the sections below it enter as they are scrolled
+   to, and interactive surfaces answer the pointer. Nothing loops, and nothing
+   moves on its own once the page has settled.
+
+   Entrances animate `translate` and `scale` rather than `transform`, because an
+   animation outranks a plain declaration even after it has finished: a card
+   whose reveal ended holding `transform: none` could never lift under the
+   pointer again. Two properties, two owners, no argument.
    --------------------------------------------------------------------------- */
 
 @layer utilities {
+  /* -- On load: the hero, a line at a time -------------------------------- */
+
   .rise {
     animation: rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
     animation-delay: calc(var(--rise-index, 0) * 70ms);
   }
 
+  /* The portrait is the largest thing in the hero, so it takes a longer beat
+     and settles out of very slightly small rather than just sliding. */
+  .portrait.rise {
+    animation-name: rise-portrait;
+    animation-duration: 0.75s;
+  }
+
   @keyframes rise {
     from {
       opacity: 0;
-      transform: translateY(0.5rem);
+      translate: 0 0.5rem;
     }
     to {
       opacity: 1;
-      transform: none;
+      translate: none;
     }
   }
 
+  @keyframes rise-portrait {
+    from {
+      opacity: 0;
+      translate: 0 0.75rem;
+      scale: 0.97;
+    }
+    to {
+      opacity: 1;
+      translate: none;
+      scale: none;
+    }
+  }
+
+  /* -- On scroll: everything under the hero ------------------------------- */
+
+  /* Driven by the element's own position in the scrollport, so there is no
+     observer, no client component and nothing to hydrate. The rule sits inside
+     @supports rather than hiding content up front on faith: a browser without
+     scroll-driven animation is never handed an element it cannot reveal, so
+     the worst case is a page that simply does not move.
+
+     `animation-duration` is deliberately absent. Its initial value is `auto`,
+     which is what makes a scroll-driven animation span its range instead of
+     running on a clock of its own. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal {
+        animation-name: rise;
+        animation-timing-function: ease-out;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        /* Begins once the element has cleared the fold and is done a fifth
+           of the way through its pass, which puts it at rest well before it is
+           close enough to read. The end is kept early on purpose: the last
+           thing on the page has only the footer left to scroll past, and a
+           reveal that cannot finish is one that never quite arrives. */
+        animation-range: entry 8% cover 20%;
+      }
+
+      /* The right-hand card in a row shares its neighbour's scroll position
+         exactly, so without this the pair moves as one block. */
+      .reveal-late {
+        animation-range: entry 15% cover 27%;
+      }
+    }
+  }
+
+  /* -- Under the pointer -------------------------------------------------- */
+
+  @media (prefers-reduced-motion: no-preference) {
+    a.card:hover,
+    .card-interactive:hover {
+      transform: translateY(-3px);
+    }
+
+    /* The screenshot creeps forward behind the card's own frame, which the
+       card already clips. */
+    .shot img,
+    .shot-placeholder {
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    a.card:hover .shot img,
+    .card-interactive:hover .shot img,
+    .card-interactive:hover .shot-placeholder {
+      transform: scale(1.04);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    /* Held down sits back on the line, so a tap has something to answer it. */
+    .btn:active {
+      transform: translateY(0);
+    }
+  }
+
+  /* -- The opt-out -------------------------------------------------------- */
+
+  /* Scroll reveals are already inside a no-preference query, so only the load
+     entrance and the drawn underline need switching off here. What the hover
+     rules change is still shown, just without the travel. */
   @media (prefers-reduced-motion: reduce) {
     .rise {
       animation: none;
+    }
+
+    .nav-link::after {
+      transition: none;
     }
   }
 }
