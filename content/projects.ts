@@ -10,9 +10,6 @@ import type { Project } from "@/types/project";
  * so `live` and `repo` are left off rather than guessed — a card simply omits
  * what it doesn't know.
  *
- * TODO(sarbajit): screenshots for Nonamart and Krishi Saathi. Drop a file in
- * public/projects/ and set `image` to its path; until then a card renders a
- * lettered placeholder.
  */
 export const projects: readonly Project[] = [
   {
@@ -21,6 +18,7 @@ export const projects: readonly Project[] = [
     blurb:
       "An e-commerce marketplace built at NTCS. I worked the backend and the performance side of it: real-time currency exchange handling that has to stay correct across a session, and optimisations to the product and cart data flows that carry the checkout.",
     stack: ["Next.js", "Express.js", "PostgreSQL", "Tailwind CSS"],
+    image: "/projects/nonamart.jpg",
     /* Checked 2026-09-11: the domain resolves, but the Nonamart deployment is
        not on it — the host answers every name with its default vhost, whose
        certificate is issued for thimar.com, so a browser warns before showing
